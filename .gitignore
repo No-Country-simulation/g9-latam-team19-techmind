@@ -1,0 +1,43 @@
+# ==========================================
+# Java / Maven (Carpeta backend)
+# ==========================================
+backend/**/target/
+backend/**/.mvn/
+backend/**/*.class
+backend/**/*.jar
+backend/**/*.war
+backend/*.log
+
+# ==========================================
+# Python / Data Science (Carpeta data-scientist)
+# ==========================================
+data-scientist/**/venv/
+data-scientist/**/.venv/
+data-scientist/**/__pycache__/
+data-scientist/**/*.pyc
+data-scientist/**/.ipynb_checkpoints/
+*.joblib
+*.pickle
+
+# ==========================================
+# Frontend / Node (Carpeta frontend)
+# ==========================================
+frontend/**/node_modules/
+frontend/**/dist/
+frontend/**/.env
+frontend/**/.env.local
+frontend/**/.env.development.local
+frontend/**/.env.test.local
+frontend/**/.env.production.local
+
+# ==========================================
+# IDEs, Sistema y Docker local (Global)
+# ==========================================
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+Thumbs.db
+.DS_Store
+.env
