@@ -1,12 +1,31 @@
 # ==========================================
-# Java / Maven (Carpeta backend)
+# Java / Maven / Spring Boot (Backend)
 # ==========================================
-backend/**/target/
+**/target/
+!**/src/main/**/target/
+!**/src/test/**/target/
 backend/**/.mvn/
+!.mvn/wrapper/maven-wrapper.jar
 backend/**/*.class
 backend/**/*.jar
 backend/**/*.war
 backend/*.log
+HELP.md
+
+# Archivos de configuración de Eclipse / STS / NetBeans
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
 
 # ==========================================
 # Python / Data Science (Carpeta data-scientist)
@@ -31,9 +50,12 @@ frontend/**/.env.test.local
 frontend/**/.env.production.local
 
 # ==========================================
-# IDEs, Sistema y Docker local (Global)
+# IDEs, Sistema y Archivos Locales (Global)
 # ==========================================
 .idea/
+*.iws
+*.iml
+*.ipr
 .vscode/
 *.suo
 *.ntvs*
