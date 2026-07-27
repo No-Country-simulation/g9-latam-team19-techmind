@@ -75,7 +75,7 @@ def save_keywords_json(keywords: list, filename: str = "keywords.json") -> None:
     Save extracted keywords into a JSON file.
     """
     output = {
-        "category" : prueba,
+        "category" : "prueba",
         "confidence" : 9.5,
         "keywords": keywords
     }
