@@ -1,19 +1,19 @@
 package com.techmind.backend.dto;
 
 public class PrediccionResponse {
-    private String categoria;
-    private double probabilidad;
+    private String category;
+    private double confidence;
 
     public PrediccionResponse() {}
 
-    public PrediccionResponse(String categoria, double probabilidad) {
-        this.categoria = categoria;
-        this.probabilidad = probabilidad;
+    public PrediccionResponse(String category, double confidence) {
+        this.category = category;
+        this.confidence = confidence;
     }
 
-    public String getCategoria() { return categoria; }
-    public void setCategoria(String categoria) { this.categoria = categoria; }
+    public String getCategory() { return category; }
+    public void setCategory(String category) { this.category = category; }
 
-    public double getProbabilidad() { return probabilidad; }
-    public void setProbabilidad(double probabilidad) { this.probabilidad = probabilidad; }
+    public double getConfidence() { return confidence; }
+    public void setConfidence(double confidence) { this.confidence = confidence; }
 }
