@@ -15,9 +15,9 @@ public class ContenidoRequest {
         this.texto = text;
     }
 
-    public String getTitulo() { return title;}
-    public void setTitulo(String title) { this.title = title; }
+    public String getTitle() { return title;}
+    public void setTitle(String title) { this.title = title; }
 
-    public String getTexto() { return text; }
-    public  void setTexto(String text) { this.text = text; }
+    public String getText() { return text; }
+    public  void setText(String text) { this.text = text; }
 }
