@@ -15,7 +15,7 @@ public class ClasificadorService {
     }
 
     public PrediccionResponse obtenerClasificacion(ContenidoRequest request) {
-        String urlPython = "http://localhost:8888/predict";
+        String urlPython = "http://localhost:8000/contenido";
 
         try {
             return restTemplate.postForObject(urlPython, request, PrediccionResponse.class);
