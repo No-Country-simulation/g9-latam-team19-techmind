@@ -34,10 +34,12 @@ def process_data(data: dict) -> dict:
     keywords = extract_keywords(cleaned_text, catalog)
 
     output = {
+        "category" : "prueba",
+        "confidence" : 9.5,
         "keywords": keywords
     }
 
-    save_keywords_json(output)
+    #save_keywords_json(output)
 
     return output
     
