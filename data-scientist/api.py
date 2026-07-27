@@ -16,13 +16,14 @@ class Document(BaseModel):
 
 # Define un endpoint POST  /extract-keywords
 # Recibe un documento y devuelve las palabras clave encontradas
-@app.post("/extract-keywords")
-def extract_keywords(document: Document):
+@app.post("/contenido")
+def extract_content(document: Document):
 
     # Convierte el objeto Document en un diccionario
     # y lo envía al pipeline de extracción
     result = process_data(document.model_dump())
     return result
+#
 
 
 # Ejecutar la API desde la terminal:
