@@ -23,7 +23,7 @@ def extract_content(document: Document):
     # y lo envía al pipeline de extracción
     result = process_data(document.model_dump())
     return result
-
+#
 
 # Ejecutar la API desde la terminal:
 # python -m uvicorn api:app --reload
