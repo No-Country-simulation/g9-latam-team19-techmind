@@ -129,6 +129,7 @@ El resultado generado contiene las keywords detectadas:
 ---
 
 # 🧩 Módulos
+Se utilizó Python 3.
 
 ## `extractor.py`
 

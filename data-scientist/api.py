@@ -25,6 +25,7 @@ def extract_content(document: Document):
     return result
 #
 
+
 # Ejecutar la API desde la terminal:
 # python -m uvicorn api:app --reload
 
