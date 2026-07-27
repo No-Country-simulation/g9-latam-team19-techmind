@@ -11,8 +11,8 @@ public class ContenidoRequest {
     private String text;
 
     public ContenidoRequest(String title, String text) {
-        this.titulo = title;
-        this.texto = text;
+        this.title = title;
+        this.text = text;
     }
 
     public String getTitle() { return title;}
