@@ -5,19 +5,19 @@ import jakarta.validation.constraints.NotBlank;
 public class ContenidoRequest {
 
     @NotBlank(message = "El titulo es obligatorio.")
-    private String titulo;
+    private String title;
 
     @NotBlank(message = "El texto es obligatorio.")
-    private String texto;
+    private String text;
 
-    public ContenidoRequest(String titulo, String texto) {
-        this.titulo = titulo;
-        this.texto = texto;
+    public ContenidoRequest(String title, String text) {
+        this.titulo = title;
+        this.texto = text;
     }
 
-    public String getTitulo() { return titulo;}
-    public void setTitulo(String titulo) { this.titulo = titulo; }
+    public String getTitulo() { return title;}
+    public void setTitulo(String title) { this.title = title; }
 
-    public String getTexto() { return texto; }
-    public  void setTexto(String texto) { this.texto = texto; }
+    public String getTexto() { return text; }
+    public  void setTexto(String text) { this.text = text; }
 }
