@@ -4,8 +4,7 @@ from keyword_functions import (
     extract_text,
     clean_text,
     load_keyword_catalog,
-    extract_keywords,
-    save_keywords_json
+    extract_keywords
 )
 
 
