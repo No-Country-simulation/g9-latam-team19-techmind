@@ -1,5 +1,6 @@
 
 import json
+import re
 
 # ==========================
 # Text preprocessing
@@ -54,36 +55,20 @@ def load_keyword_catalog(filename: str ="keyword_catalog.json") -> list:
 
 def extract_keywords(cleaned_text: str, catalog: list) -> list:
   """
-  Extract keywords from text based on a our predefined knowledge-base catalog.
+  Extract keywords from text by matching complete words and phrases
+  against the predefined keyword catalog.
   """
   keywords = []
 
   for keyword in catalog:
-      if keyword in cleaned_text:
-          keywords.append(keyword)
+
+    # Busca la keyword como una palabra o frase completa.
+    # re.escape() evita problemas con caracteres especiales (ej. "node.js").
+    pattern = r"\b" + re.escape(keyword) + r"\b"
+
+    if re.search(pattern, cleaned_text):
+      keywords.append(keyword)
 
   return keywords
 
 
-# ==========================
-# JSON output
-# ==========================
-
-
-def save_keywords_json(keywords: list, filename: str = "keywords.json") -> None:
-    """
-    Save extracted keywords into a JSON file.
-    """
-    output = {
-        "category" : "prueba",
-        "confidence" : 9.5,
-        "keywords": keywords
-    }
-
-    with open(filename, "w", encoding="utf-8") as file:
-        json.dump(
-            output,
-            file,
-            indent=4,
-            ensure_ascii=False
-        )
