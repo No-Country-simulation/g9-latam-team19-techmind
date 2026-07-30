@@ -65,25 +65,3 @@ def extract_keywords(cleaned_text: str, catalog: list) -> list:
   return keywords
 
 
-# ==========================
-# JSON output
-# ==========================
-
-
-def save_keywords_json(keywords: list, filename: str = "keywords.json") -> None:
-    """
-    Save extracted keywords into a JSON file.
-    """
-    output = {
-        "category" : "prueba",
-        "confidence" : 9.5,
-        "keywords": keywords
-    }
-
-    with open(filename, "w", encoding="utf-8") as file:
-        json.dump(
-            output,
-            file,
-            indent=4,
-            ensure_ascii=False
-        )
