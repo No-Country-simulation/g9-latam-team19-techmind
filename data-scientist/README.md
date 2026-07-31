@@ -59,11 +59,13 @@ keyword_extractor/
 │   ├── extract_text()
 │   ├── clean_text()
 │   ├── load_keyword_catalog()
-│   ├── extract_keywords()
-│   └── save_keywords_json()
+│   └── extract_keywords() 
 │
 ├── keyword_catalog.json
 │   └── Lista de keywords utilizada para la búsqueda
+│
+├── update_catalog.ipynb
+│   └── Herramienta para generar nuevos archivos de keyword_catalog.json actualizados
 │
 ├── keywords.json
 │   └── Archivo de salida con las keywords detectadas
@@ -114,7 +116,7 @@ El pipeline espera un objeto tipo diccionario/JSON que contenga:
 
 # 📤 Formato de salida
 
-El resultado generado contiene las keywords detectadas:
+El resultado generado hasta ahora contiene las keywords detectadas:
 
 ```json
 {
@@ -191,13 +193,7 @@ keyword_catalog.json
 
 Busca las keywords presentes en el texto limpio utilizando el catálogo predefinido.
 
----
 
-### `save_keywords_json(keywords: list, filename: str) -> None`
-
-Genera el archivo JSON de salida con las keywords extraídas.
-
----
 
 # 📚 Catálogo de Keywords
 
@@ -220,9 +216,34 @@ Ejemplo:
 ]
 ```
 
-El catálogo puede actualizarse conforme se agreguen nuevas tecnologías o keywords relevantes para la base de conocimiento.
+El catálogo puede actualizarse conforme se agreguen nuevas tecnologías o keywords relevantes para la base de conocimiento. Para este propósito generamos un notebook donde se puede hacer de manera más efectiva y ordenada:
 
 ---
+
+## `update_catalog.py`
+
+Este script permite actualizar el archivo `keyword_catalog.json` de forma automática, agregando nuevas palabras clave sin generar duplicados.
+
+Su objetivo es facilitar la actualización del catálogo conforme el equipo identifique nuevos términos relevantes durante el desarrollo del proyecto.
+
+### ¿Qué hace?
+
+* Carga la versión actual de `keyword_catalog.json`.
+* Agrega las nuevas palabras clave definidas en la lista `new_input`.
+* Elimina automáticamente las palabras repetidas, conservando el orden original de aparición.
+* Genera un nuevo archivo `keyword_catalog.json` actualizado, listo para reemplazar la versión anterior del repositorio.
+
+### ¿Cómo utilizarlo?
+
+1. Descarga la versión más reciente de `keyword_catalog.json` del repositorio.
+2. Abre el archivo `update_catalog.py`.
+3. Reemplaza el contenido de la lista `new_input` con las palabras clave que deseas agregar.
+4. Ejecuta el script.
+5. Se generará un nuevo `keyword_catalog.json` con el catálogo actualizado.
+6. Sustituye el archivo anterior del repositorio por el nuevo archivo generado.
+
+> **Importante:** `new_input` debe ser una lista de cadenas (`list[str]`) y cada palabra clave debe escribirse entre comillas y separarse por comas.
+
 
 # 🚀 Uso
 
