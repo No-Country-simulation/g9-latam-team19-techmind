@@ -1,7 +1,7 @@
 package com.techmind.backend.controller;
 
-import com.techmind.backend.dto.ContenidoRequest;
-import com.techmind.backend.dto.PrediccionResponse;
+import com.techmind.backend.dto.ContenidoDTO;
+import com.techmind.backend.dto.PrediccionDTO;
 import com.techmind.backend.service.ClasificadorService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -21,8 +21,8 @@ public class ContenidoController {
     }
 
     @PostMapping
-    public ResponseEntity<PrediccionResponse> procesarContenido(@Valid @RequestBody ContenidoRequest request) {
-        PrediccionResponse resultado = clasificadorService.obtenerClasificacion(request);
+    public ResponseEntity<PrediccionDTO> procesarContenido(@Valid @RequestBody ContenidoDTO request) {
+        PrediccionDTO resultado = clasificadorService.obtenerClasificacion(request);
         return ResponseEntity.ok(resultado);
     }
 }
