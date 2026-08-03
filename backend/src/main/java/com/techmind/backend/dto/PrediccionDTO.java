@@ -10,7 +10,8 @@ public class PrediccionDTO {
     public PrediccionDTO() {
     }
 
-    public PrediccionDTO(String category, double confidence) {
+    // Agregamos List<String> keywords a los argumentos del constructor para que reciba el listado de palabras clave correctamente.
+    public PrediccionDTO(String category, Double confidence, List<String> keywords) {
         this.category = category;
         this.confidence = confidence;
         this.keywords = keywords;

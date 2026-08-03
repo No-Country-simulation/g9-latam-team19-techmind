@@ -13,7 +13,8 @@ public class Keyword {
     @Column(nullable = false)
     private String keyword;
 
-    @ManyToOne
+    // Agregamos FetchType.LAZY para optimizar el rendimiento de las consultas
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "prediccion_id", nullable = false)
     private Prediccion prediccion;
 
@@ -26,6 +27,9 @@ public class Keyword {
 
     public Long getId() {
         return id;
+    }
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getKeyword() {
