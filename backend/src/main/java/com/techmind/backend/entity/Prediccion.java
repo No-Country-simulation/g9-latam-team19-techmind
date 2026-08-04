@@ -1,6 +1,7 @@
 package com.techmind.backend.entity;
 
 import jakarta.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -22,8 +23,9 @@ public class Prediccion {
     @JoinColumn(name = "contenido_id", nullable = false)
     private Contenido contenido;
 
+    // Se inicializa con ArrayList para evitar NullPointerException
     @OneToMany(mappedBy = "prediccion", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Keyword> keywords;
+    private List<Keyword> keywords = new ArrayList<>();
 
     public Prediccion() {
     }
@@ -32,9 +34,17 @@ public class Prediccion {
         this.category = category;
         this.confidence = confidence;
     }
+    // Se agrega metodo helper crucial para vincular la relación en ambos sentidos
+    public void addKeyword(Keyword keyword) {
+        keywords.add(keyword);
+        keyword.setPrediccion(this);
+    }
 
     public Long getId() {
         return id;
+    }
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getCategory() {
