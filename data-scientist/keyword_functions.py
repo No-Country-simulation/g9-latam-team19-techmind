@@ -2,6 +2,7 @@ import json
 import re
 from pathlib import Path
 
+
 # ==========================
 # Text preprocessing
 # ==========================
@@ -43,7 +44,7 @@ def clean_text(raw_text: str) -> str:
 # ==========================
 
 
-def load_keyword_catalog(filename: str = "keyword_catalog.json") -> list:
+def load_keyword_catalog(filename: str = "keyword_catalog.json") -> list | dict:
     """
     Import the keyword catalog JSON file that contains a list of keywords from the knowledge base
     The path is resolved relative to this module.
@@ -72,5 +73,67 @@ def extract_keywords(cleaned_text: str, catalog: list) -> list:
 
         if re.search(pattern, cleaned_text) and keyword not in keywords:
             keywords.append(keyword)
+
+    return keywords
+
+def extract_canonical_keywords(
+        cleaned_text: str,
+        catalog: dict[str, list[str]]
+) -> list[str]:
+    """
+    Extract canonical technical keywords from text.
+
+    Longer and more specific matches have priority over
+    shorter matches that overlap with them.
+    """
+
+    matches = []
+
+    # 1. Find every possible match
+    for canonical_keyword, aliases in catalog.items():
+
+        complete_catalog = [canonical_keyword, *aliases]
+
+        for keyword in complete_catalog:
+            pattern = rf"(?<!\w){re.escape(keyword)}(?!\w)"
+
+            for match in re.finditer(pattern, cleaned_text):
+                matches.append({
+                    "canonical": canonical_keyword,
+                    "start": match.start(),
+                    "end": match.end()
+                })
+
+    # 2. Prioritize longer matches
+    matches.sort(
+        key=lambda item: item["end"] - item["start"],
+        reverse=True
+    )
+
+    selected_matches = []
+
+    # 3. Discard matches that overlap with a more specific one
+    for match in matches:
+
+        overlaps = any(
+            match["start"] < selected["end"]
+            and match["end"] > selected["start"]
+            for selected in selected_matches
+        )
+
+        if not overlaps:
+            selected_matches.append(match)
+
+    # 4. Restore the order in which concepts appear in the text
+    selected_matches.sort(key=lambda item: item["start"])
+
+    # 5. Return each canonical concept only once
+    keywords = []
+
+    for match in selected_matches:
+        canonical_keyword = match["canonical"]
+
+        if canonical_keyword not in keywords:
+            keywords.append(canonical_keyword)
 
     return keywords

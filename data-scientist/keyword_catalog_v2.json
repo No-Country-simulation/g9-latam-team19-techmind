@@ -1,0 +1,135 @@
+{
+  "java": [],
+  "python": [],
+  "javascript": [
+    "js"
+  ],
+  "typescript": [
+    "ts"
+  ],
+  "go": [
+    "golang"
+  ],
+  "c": [],
+  "c++": [
+    "cpp"
+  ],
+  "c#": [
+    "csharp"
+  ],
+  "kotlin": [],
+  "rust": [],
+  "ruby": [],
+  "php": [],
+
+  "spring boot": [
+    "springboot"
+  ],
+  "spring framework": [
+    "spring framework"
+  ],
+  "spring mvc": [],
+  "spring data jpa": [
+    "spring data",
+    "spring jpa"
+  ],
+  "hibernate": [],
+  "jpa": [
+    "jakarta persistence"
+  ],
+  "fastapi": [
+    "fast api"
+  ],
+  "django": [],
+  "flask": [],
+  "node.js": [
+    "nodejs",
+    "node js"
+  ],
+  "express.js": [
+    "expressjs",
+    "express js",
+    "express"
+  ],
+  "pydantic": [],
+  "uvicorn": [],
+  "asgi": [],
+  "wsgi": [],
+  "rest api": [
+    "api rest",
+    "apirest",
+    "rest-api",
+    "restful api",
+    "restful APIs"
+  ],
+  "graphql": [
+    "graph ql"
+  ],
+  "openapi": [
+    "open api"
+  ],
+  "swagger": [],
+  "json": [],
+  "xml": [],
+  "http": [],
+  "https": [],
+  "crud": [],
+
+  "react": [
+    "reactjs",
+    "react js"
+  ],
+  "angular": [
+    "angular framework"
+  ],
+  "vue.js": [
+    "vue",
+    "vuejs",
+    "vue js"
+  ],
+  "svelte": [],
+  "html": [
+    "html5",
+    "html 5"
+  ],
+  "css": [
+    "css3"
+  ],
+  "bootstrap": [],
+  "tailwind css": [
+    "tailwind",
+    "tailwindcss"
+  ],
+  "material ui": [
+    "mui"
+  ],
+  "vite": [],
+  "rxjs": [],
+  "redux": [],
+  "react router": [
+    "react router dom"
+  ],
+  "react hook form": [],
+  "jsx": [],
+  "tsx": [],
+  "dom": [
+    "document object model"
+  ],
+  "virtual dom": [
+    "dom virtual"
+  ],
+  "spa": [
+    "single page application"
+  ],
+  "responsive design": [],
+  "flexbox": [
+    "css flexbox"
+  ],
+  "css grid": [
+    "grid layout",
+    "css grid layout"
+  ],
+  "local storage": [
+    "localstorage"
+  ]
+}
