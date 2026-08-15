@@ -1,12 +1,45 @@
 import json
 import re
-from pathlib import Path
 
+from pathlib import Path
+from collections import Counter
 
 # ==========================
 # Text preprocessing
 # ==========================
 
+FALLBACK_STOPWORDS = {
+    # Spanish
+    "a", "al", "algo", "algunas", "algunos",
+    "ante", "antes", "como", "con", "contra",
+    "cual", "cuando", "de", "del", "desde",
+    "donde", "durante", "e", "el", "ella",
+    "ellas", "ellos", "en", "entre", "era",
+    "es", "esa", "ese", "eso", "esta",
+    "este", "esto", "estos", "fue", "ha",
+    "hasta", "hay", "la", "las", "le",
+    "les", "lo", "los", "más", "me",
+    "mi", "muy", "no", "nos", "o",
+    "para", "pero", "por", "porque", "que",
+    "se", "sin", "sobre", "son", "su",
+    "sus", "también", "te", "tiene", "tu",
+    "un", "una", "uno", "unos", "unas",
+    "varias", "varios", "y", "ya",
+
+    # English
+    "a", "an", "and", "are", "as", "at",
+    "be", "been", "but", "by", "can",
+    "for", "from", "had", "has", "have",
+    "he", "her", "his", "how", "i",
+    "if", "in", "into", "is", "it",
+    "its", "more", "not", "of", "on",
+    "or", "our", "she", "so", "than",
+    "that", "the", "their", "them", "then",
+    "there", "these", "they", "this", "those",
+    "to", "was", "we", "were", "what",
+    "when", "where", "which", "who", "will",
+    "with", "you", "your"
+}
 
 def extract_text(data: dict) -> str:
     """
@@ -44,7 +77,7 @@ def clean_text(raw_text: str) -> str:
 # ==========================
 
 
-def load_keyword_catalog(filename: str = "keyword_catalog.json") -> list | dict:
+def load_keyword_catalog(filename: str = "keyword_catalog_v2.json") -> dict[str, list[str]]:
     """
     Import the keyword catalog JSON file that contains a list of keywords from the knowledge base
     The path is resolved relative to this module.
@@ -137,3 +170,57 @@ def extract_canonical_keywords(
             keywords.append(canonical_keyword)
 
     return keywords
+
+def extract_fallback_keywords(
+        cleaned_text: str,
+        max_keywords: int = 5
+) -> list[str]:
+    """
+    Extract relevant keywords when the technical catalog
+    does not contain matches.
+
+    Candidates are ranked by:
+    1. Frequency.
+    2. Word length.
+    3. First appearance in the text.
+    """
+
+    tokens = re.findall(
+        r"\b[\wáéíóúüñ-]+\b",
+        cleaned_text,
+        flags=re.UNICODE
+    )
+
+    candidates = []
+    first_position = {}
+
+    for position, token in enumerate(tokens):
+
+        if token in FALLBACK_STOPWORDS:
+            continue
+
+        if token.isdigit():
+            continue
+
+        # Three characters allows useful terms such as
+        # RAG, LLM, SAP, etc.
+        if len(token) < 3:
+            continue
+
+        candidates.append(token)
+
+        if token not in first_position:
+            first_position[token] = position
+
+    frequencies = Counter(candidates)
+
+    ranked_keywords = sorted(
+        frequencies,
+        key=lambda token: (
+            -frequencies[token],
+            -len(token),
+            first_position[token]
+        )
+    )
+
+    return ranked_keywords[:max_keywords]

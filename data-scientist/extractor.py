@@ -4,7 +4,8 @@ from keyword_functions import (
     extract_text,
     clean_text,
     load_keyword_catalog,
-    extract_keywords
+    extract_canonical_keywords,
+    extract_fallback_keywords
 )
 
 
@@ -28,10 +29,11 @@ def process_data(data: dict) -> dict:
 
     cleaned_text = clean_text(raw_text)
 
-    catalog = load_keyword_catalog()
+    catalog = load_keyword_catalog("keyword_catalog_v2.json")
 
-    keywords = extract_keywords(cleaned_text, catalog)
-
+    keywords = extract_canonical_keywords(cleaned_text, catalog)
+    if not keywords:
+        keywords = extract_fallback_keywords(cleaned_text)
     output = {
         "category" : "prueba",
         "confidence" : 9.5,

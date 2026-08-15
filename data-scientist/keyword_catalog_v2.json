@@ -4,11 +4,10 @@
   "javascript": [
     "js"
   ],
-  "typescript": [
-    "ts"
-  ],
-  "go": [
-    "golang"
+  "typescript": [],
+  "golang": [
+  "go language",
+  "go programming language"
   ],
   "c": [],
   "c++": [
@@ -60,7 +59,8 @@
     "apirest",
     "rest-api",
     "restful api",
-    "restful APIs"
+    "restful APIs",
+    "apis rest"
   ],
   "graphql": [
     "graph ql"
@@ -131,5 +131,460 @@
   ],
   "local storage": [
     "localstorage"
+  ],
+    "pandas": [],
+  "numpy": [
+    "numpy library"
+  ],
+  "scikit-learn": [
+    "scikit learn",
+    "sklearn"
+  ],
+  "tensorflow": [
+    "tensor flow"
+  ],
+  "pytorch": [
+    "torch"
+  ],
+  "matplotlib": [],
+  "seaborn": [],
+  "jupyter": [
+    "jupyter notebook"
+  ],
+  "google colab": [
+    "colab",
+    "google colaboratory"
+  ],
+  "dataframe": [
+    "dataframes",
+    "data frame",
+    "data frames"
+  ],
+  "pandas series": [
+    "series de pandas"
+  ],
+  "ndarray": [
+    "numpy array",
+    "numpy arrays"
+  ],
+  "machine learning": [
+    "aprendizaje automático",
+    "aprendizaje de máquina"
+  ],
+  "deep learning": [
+    "aprendizaje profundo"
+  ],
+  "neural network": [
+    "neural networks",
+    "red neuronal",
+    "redes neuronales"
+  ],
+  "supervised learning": [
+    "aprendizaje supervisado"
+  ],
+  "unsupervised learning": [
+    "aprendizaje no supervisado"
+  ],
+  "classification": [
+    "clasificación"
+  ],
+  "clustering": [
+    "agrupamiento"
+  ],
+  "k-means": [
+    "kmeans",
+    "k means"
+  ],
+  "natural language processing": [
+    "nlp",
+    "procesamiento de lenguaje natural",
+    "procesamiento del lenguaje natural"
+  ],
+  "tf-idf": [
+    "tfidf",
+    "tf idf",
+    "term frequency inverse document frequency"
+  ],
+  "logistic regression": [
+    "regresión logística"
+  ],
+  "tokenization": [
+    "tokenización"
+  ],
+  "stopwords": [
+    "stop words",
+    "palabras vacías"
+  ],
+  "stemming": [],
+  "lemmatization": [
+    "lematización"
+  ],
+  "feature engineering": [
+    "ingeniería de características"
+  ],
+  "train test split": [
+    "train-test split",
+    "training test split"
+  ],
+  "cross validation": [
+    "cross-validation",
+    "validación cruzada"
+  ],
+  "confusion matrix": [
+    "matriz de confusión"
+  ],
+  "accuracy": [
+    "exactitud"
+  ],
+  "precision": [
+    "precisión"
+  ],
+  "recall": [
+    "sensibilidad"
+  ],
+  "f1 score": [
+    "f1-score",
+    "f1"
+  ],
+  "joblib": [],
+  "pickle": [],
+
+  "sql": [
+    "structured query language"
+  ],
+  "oracle database": [
+    "oracle db"
+  ],
+  "autonomous ai database": [
+    "autonomous database",
+    "oracle autonomous database",
+    "oracle autonomous ai database"
+  ],
+  "mysql": [],
+  "postgresql": [
+    "postgres",
+    "postgre sql"
+  ],
+  "microsoft sql server": [
+    "sql server",
+    "mssql"
+  ],
+  "sqlite": [
+    "sqlite3"
+  ],
+  "mongodb": [
+    "mongo db"
+  ],
+  "redis": [],
+  "nosql": [
+    "no sql"
+  ],
+  "pl/sql": [
+    "plsql",
+    "pl sql"
+  ],
+  "jdbc": [
+    "java database connectivity"
+  ],
+  "flyway": [],
+  "liquibase": [],
+  "database migration": [
+    "database migrations",
+    "migración de base de datos",
+    "migraciones de base de datos"
+  ],
+  "transaction": [
+    "transactions",
+    "transacción",
+    "transacciones"
+  ],
+  "acid": [
+    "acid properties",
+    "propiedades acid"
+  ],
+    "cloud computing": [
+    "computación en la nube",
+    "cloud"
+  ],
+  "oci": [
+    "oracle cloud infrastructure"
+  ],
+  "aws": [
+    "amazon web services"
+  ],
+  "azure": [
+    "microsoft azure"
+  ],
+  "gcp": [
+    "google cloud platform",
+    "google cloud"
+  ],
+  "compute instance": [
+    "compute instances",
+    "instancia de compute",
+    "instancias de compute",
+    "virtual machine",
+    "virtual machines",
+    "vm"
+  ],
+  "object storage": [
+    "almacenamiento de objetos"
+  ],
+  "block storage": [
+    "block volume",
+    "block volumes",
+    "almacenamiento en bloques"
+  ],
+  "file storage": [
+    "almacenamiento de archivos"
+  ],
+  "load balancer": [
+    "load balancing",
+    "balanceador de carga",
+    "balanceador de cargas",
+    "balanceo de carga"
+  ],
+  "api gateway": [
+    "gateway de api"
+  ],
+  "serverless": [
+    "serverless computing"
+  ],
+  "function as a service": [
+    "faas",
+    "functions as a service"
+  ],
+
+  "docker": [],
+  "container": [
+    "containers",
+    "contenedor",
+    "contenedores"
+  ],
+  "kubernetes": [
+    "k8s"
+  ],
+  "terraform": [],
+  "ansible": [],
+  "jenkins": [],
+  "github actions": [],
+  "gitlab ci": [
+    "gitlab ci/cd"
+  ],
+  "ci/cd": [
+    "cicd",
+    "ci cd",
+    "continuous integration and continuous delivery",
+    "continuous integration and continuous deployment",
+    "integración continua",
+    "entrega continua"
+  ],
+  "infrastructure as code": [
+    "iac",
+    "infraestructura como código"
+  ],
+  "gitops": [
+    "git ops"
+  ],
+  "helm": [
+    "helm charts",
+    "helm chart"
+  ],
+  "argo cd": [
+    "argocd",
+    "argo-cd"
+  ],
+  "prometheus": [],
+  "grafana": [],
+  "systemd": [],
+  "nginx": [],
+  "apache http server": [
+    "apache httpd",
+    "httpd"
+  ],
+  "linux": [],
+  "bash": [
+    "shell scripting"
+  ],
+
+  "networking": [
+    "computer networking",
+    "redes de computadoras",
+    "redes informáticas"
+  ],
+  "tcp/ip": [
+    "tcp ip"
+  ],
+  "tcp": [
+    "transmission control protocol"
+  ],
+  "udp": [
+    "user datagram protocol"
+  ],
+  "ipv4": [
+    "internet protocol version 4"
+  ],
+  "ipv6": [
+    "internet protocol version 6"
+  ],
+  "dns": [
+    "domain name system"
+  ],
+  "dhcp": [
+    "dynamic host configuration protocol"
+  ],
+  "nat": [
+    "network address translation"
+  ],
+  "cidr": [
+    "classless inter-domain routing"
+  ],
+  "subnet": [
+    "subnets",
+    "subred",
+    "subredes"
+  ],
+  "subnetting": [
+    "subneteado"
+  ],
+  "router": [
+    "routers",
+    "enrutador",
+    "enrutadores"
+  ],
+  "switch": [
+    "switches",
+    "conmutador",
+    "conmutadores"
+  ],
+  "routing": [
+    "enrutamiento"
+  ],
+  "switching": [
+    "conmutación"
+  ],
+  "vlan": [
+    "virtual lan",
+    "virtual local area network"
+  ],
+  "ospf": [
+    "open shortest path first"
+  ],
+  "bgp": [
+    "border gateway protocol"
+  ],
+  "stp": [
+    "spanning tree protocol"
+  ],
+  "acl": [
+    "access control list",
+    "access control lists"
+  ],
+  "firewall": [
+    "cortafuegos"
+  ],
+  "network port": [
+  "puerto de red",
+  "puerto tcp",
+  "puerto udp",
+  "tcp port",
+  "udp port"
+  ],
+  "vcn": [
+    "virtual cloud network"
+  ],
+  "vpc": [
+    "virtual private cloud"
+  ],
+  "network security group": [
+    "nsg",
+    "network security groups"
+  ],
+  "security list": [
+    "security lists"
+  ],
+  "internet gateway": [
+    "igw"
+  ],
+  "nat gateway": [],
+  "service gateway": [],
+  "route table": [
+    "routing table",
+    "tabla de rutas"
+  ],
+  "reverse proxy": [
+    "proxy inverso"
+  ],
+  "cisco": [
+    "cisco systems"
+  ],
+
+  "cybersecurity": [
+    "cyber security",
+    "ciberseguridad"
+  ],
+  "authentication": [
+    "autenticación"
+  ],
+  "authorization": [
+    "autorización"
+  ],
+  "iam": [
+    "identity and access management"
+  ],
+  "rbac": [
+    "role based access control",
+    "role-based access control"
+  ],
+  "oauth 2.0": [
+    "oauth2",
+    "oauth 2",
+    "oauth"
+  ],
+  "openid connect": [
+    "oidc"
+  ],
+  "jwt": [
+    "json web token",
+    "json web tokens"
+  ],
+  "tls": [
+    "transport layer security"
+  ],
+  "ssl": [
+    "secure sockets layer"
+  ],
+  "mtls": [
+    "mutual tls",
+    "mutual transport layer security"
+  ],
+  "digital certificate": [
+  "digital certificates",
+  "certificado digital",
+  "certificados digitales",
+  "tls certificate",
+  "tls certificates",
+  "ssl certificate",
+  "ssl certificates"
+  ],
+  "encryption": [
+    "cifrado",
+    "encriptación"
+  ],
+  "hashing": [
+    "hash"
+  ],
+  "sha-256": [
+    "sha256",
+    "sha 256"
+  ],
+  "secret management": [
+  "secrets management",
+  "gestión de secretos",
+  "secret manager"
+  ],
+  "least privilege": [
+    "principle of least privilege",
+    "principio de mínimo privilegio"
   ]
 }
