@@ -252,6 +252,7 @@ def format_recommendations(recommendations):
         # Conserva únicamente los campos que se mostrarán
         # en las recomendaciones finales.
         formatted_recommendations.append({
+            "id": item["id"],
             "title": item["title"],
             "category": item["category"],
             "type": item["type"],
