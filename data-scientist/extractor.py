@@ -5,7 +5,8 @@ from keyword_functions import (
     extract_text,
     clean_text,
     load_keyword_catalog,
-    extract_keywords
+    extract_canonical_keywords,
+    extract_fallback_keywords
 )
 
 from model_functions import (
@@ -63,6 +64,11 @@ def process_keywords (data: dict) -> tuple:
     # Normaliza el texto para facilitar la búsqueda de keywords.
     cleaned_text = clean_text(raw_text)
 
+    catalog = load_keyword_catalog("keyword_catalog_v2.json")
+
+    keywords = extract_canonical_keywords(cleaned_text, catalog)
+    if not keywords:
+        keywords = extract_fallback_keywords(cleaned_text)
     # Carga el catálogo de keywords predefinido.
     catalog = load_keyword_catalog()
 
