@@ -254,7 +254,7 @@ def format_recommendations(recommendations):
         formatted_recommendations.append({
             "id": item["id"],
             "title": item["title"],
-            "category": item["category"],
+            "category_recs": item["category"],
             "type": item["type"],
             "level": item["level"],
             "language": item["language"],
