@@ -5,7 +5,14 @@ from keyword_functions import (
     extract_text,
     clean_text,
     load_keyword_catalog,
-    extract_keywords
+    extract_canonical_keywords,
+    extract_fallback_keywords
+)
+
+from model_functions import (
+    load_model,
+    generate_embedding,
+    predict_category
 )
 
 from model_functions import (
