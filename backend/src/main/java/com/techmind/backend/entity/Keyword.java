@@ -6,7 +6,7 @@ import org.hibernate.annotations.SQLRestriction;
 
 @Entity
 @Table(name = "keyword")
-@SQLDelete(sql = "UPDATE prediccion SET activo = false WHERE id = ?")
+@SQLDelete(sql = "UPDATE keyword SET activo = false WHERE id = ?")
 @SQLRestriction("activo = true")
 public class Keyword {
 

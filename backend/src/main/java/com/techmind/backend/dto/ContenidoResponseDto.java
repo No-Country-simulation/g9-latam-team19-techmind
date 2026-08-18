@@ -25,7 +25,10 @@ public record ContenidoResponseDto(
         Double confidence,
 
         @Schema(description = "Lista de palabras clave asociadas al contenido", example = "[\"CSS\", \"Flexbox\", \"HTML\"]")
-        List<String> keywords
+        List<String> keywords,
+
+        @Schema(description = "Lista de contenidos recomendados")
+        List<RecomendacionDTO> recommendations
 ) {
 
     // Metodo estático para mapear de Entidad Contenido a ContenidoResponseDto
@@ -33,6 +36,7 @@ public record ContenidoResponseDto(
         String category = null;
         Double confidence = null;
         List<String> keywords = Collections.emptyList();
+        List<RecomendacionDTO> recommendations = Collections.emptyList();
 
         if (contenido.getPrediccion() != null) {
             category = contenido.getPrediccion().getCategory();
@@ -51,7 +55,8 @@ public record ContenidoResponseDto(
                 contenido.getText(),
                 category,
                 confidence,
-                keywords
+                keywords,
+                recommendations
         );
     }
 }

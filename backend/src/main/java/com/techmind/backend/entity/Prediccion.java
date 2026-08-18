@@ -35,6 +35,9 @@ public class Prediccion {
     @OneToMany(mappedBy = "prediccion", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Keyword> keywords = new ArrayList<>();
 
+    @OneToMany(mappedBy = "prediccion", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Recomendacion> recomendaciones = new ArrayList<>();
+
     public Prediccion() {
     }
 
@@ -46,6 +49,11 @@ public class Prediccion {
     public void addKeyword(Keyword keyword) {
         keywords.add(keyword);
         keyword.setPrediccion(this);
+    }
+
+    public void addRecomendacion(Recomendacion recomendacion) {
+        recomendaciones.add(recomendacion);
+        recomendacion.setPrediccion(this);
     }
 
     public Long getId() {
@@ -89,5 +97,13 @@ public class Prediccion {
     }
     public void setKeywords(List<Keyword> keywords) {
         this.keywords = keywords;
+    }
+
+    public List<Recomendacion> getRecomendaciones() {
+        return recomendaciones;
+    }
+
+    public void setRecomendaciones(List<Recomendacion> recomendaciones) {
+        this.recomendaciones = recomendaciones;
     }
 }

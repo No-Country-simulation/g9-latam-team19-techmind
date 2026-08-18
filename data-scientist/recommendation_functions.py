@@ -1,6 +1,10 @@
 
 import json
-import oci
+
+try:
+    import oci
+except ImportError:
+    oci = None
 
 
 # ==========================
@@ -44,6 +48,11 @@ def load_knowledge_base_oci(
     Returns:
     - knowledge_base: knowledge base as a Python object.
     """
+
+    if oci is None:
+        raise ImportError(
+            "El paquete 'oci' no está instalado. Instálalo con 'pip install oci' para usar esta función."
+        )
 
     # Carga las credenciales y configuración de OCI.
     config = oci.config.from_file(

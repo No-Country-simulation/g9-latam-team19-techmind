@@ -39,4 +39,14 @@ public interface ContenidoRepository extends JpaRepository<Contenido, Long> {
     @Modifying(clearAutomatically = true)
     @Query(value = "UPDATE keyword SET activo = true WHERE prediccion_id = (SELECT id FROM prediccion WHERE contenido_id = :id)", nativeQuery = true)
     int restaurarKeywordsPorContenidoId(@Param("id") Long id);
+
+    // 4. Desactiva todas las recomendaciones asociadas a esa predicción
+    @Modifying(clearAutomatically = true)
+    @Query(value = "UPDATE recomendacion SET activo = false WHERE prediccion_id = (SELECT id FROM prediccion WHERE contenido_id = :id)", nativeQuery = true)
+    int desactivarRecomendacionesPorContenidoId(@Param("id") Long id);
+
+    // 4. Reactiva las recomendaciones asociadas a esa predicción
+    @Modifying(clearAutomatically = true)
+    @Query(value = "UPDATE recomendacion SET activo = true WHERE prediccion_id = (SELECT id FROM prediccion WHERE contenido_id = :id)", nativeQuery = true)
+    int restaurarRecomendacionesPorContenidoId(@Param("id") Long id);
 }
