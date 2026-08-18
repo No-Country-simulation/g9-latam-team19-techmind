@@ -39,13 +39,15 @@ from recommendation_functions import (
 embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
 
 # Carga el clasificador y encoder desde OCI Object Storage.
-best_model, encoder = load_model(
-    config_file="-",    # Aquí va la ruta del archivo de configuración de OCI
-    profile="-",        # Aquí va el perfil de OCI
-    namespace="-",      # Aquí va el namespace de OCI
-    bucket_name="-",    # Aquí va el nombre del bucket
-    object_name="-"     # Aquí va el nombre/ruta de best_model.pkl
-)
+
+best_model, encoder = load_model()
+#best_model, encoder = load_model(
+#    config_file="-",    # Aquí va la ruta del archivo de configuración de OCI
+#    profile="-",        # Aquí va el perfil de OCI
+#    namespace="-",      # Aquí va el namespace de OCI
+#    bucket_name="-",    # Aquí va el nombre del bucket
+#    object_name="-"     # Aquí va el nombre/ruta de best_model.pkl
+#)
 
 # ==========================
 # Keyword extraction
