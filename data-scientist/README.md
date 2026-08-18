@@ -180,9 +180,9 @@ Ejemplo:
             "python"
         ],
         "recommendations": [
-            {
+            {   "id": 23,
                 "title": "Angular Routing",
-                "category": "Frontend",
+                "category_recs": "Frontend",
                 "type": "Course",
                 "level": "Intermediate",
                 "language": "Spanish",
@@ -722,7 +722,7 @@ Para mantener consistencia entre los módulos del proyecto se siguen las siguien
 
 - Los comentarios del código se escriben en español para facilitar el trabajo colaborativo del equipo.
 
-- Los archivos JSON utilizan claves en inglés:
+- Los archivos JSON utilizan claves en inglés: 
   - `title`
   - `text`
   - `category`

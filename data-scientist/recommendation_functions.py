@@ -7,8 +7,24 @@ import oci
 # Knowledge base loading
 # ==========================
 
+def load_knowledge_base(filename="knowledge_base.json"):
+    """
+    Load the knowledge base JSON file from a local file.
 
-def load_knowledge_base(
+    Parameters:
+    - filename: name/path of the local JSON file.
+
+    Returns:
+    - knowledge_base: knowledge base as a Python object.
+    """
+
+    # Abrir el archivo JSON local.
+    with open(filename, "r", encoding="utf-8") as file:
+        knowledge_base = json.load(file)
+
+    return knowledge_base
+
+def load_knowledge_base_oci(
     config_file="~/.oci/config",
     profile="DEFAULT",
     namespace="-",
@@ -252,8 +268,9 @@ def format_recommendations(recommendations):
         # Conserva únicamente los campos que se mostrarán
         # en las recomendaciones finales.
         formatted_recommendations.append({
+            "id": item["id"],
             "title": item["title"],
-            "category": item["category"],
+            "category_recs": item["category"],
             "type": item["type"],
             "level": item["level"],
             "language": item["language"],

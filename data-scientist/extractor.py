@@ -15,6 +15,12 @@ from model_functions import (
     predict_category
 )
 
+from model_functions import (
+    load_model,
+    generate_embedding,
+    predict_category
+)
+
 from recommendation_functions import (
     load_knowledge_base,
     categories_for_recommendation,
@@ -33,13 +39,15 @@ from recommendation_functions import (
 embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
 
 # Carga el clasificador y encoder desde OCI Object Storage.
-best_model, encoder = load_model(
-    config_file="-",    # Aquí va la ruta del archivo de configuración de OCI
-    profile="-",        # Aquí va el perfil de OCI
-    namespace="-",      # Aquí va el namespace de OCI
-    bucket_name="-",    # Aquí va el nombre del bucket
-    object_name="-"     # Aquí va el nombre/ruta de best_model.pkl
-)
+
+best_model, encoder = load_model()
+#best_model, encoder = load_model(
+#    config_file="-",    # Aquí va la ruta del archivo de configuración de OCI
+#    profile="-",        # Aquí va el perfil de OCI
+#    namespace="-",      # Aquí va el namespace de OCI
+#    bucket_name="-",    # Aquí va el nombre del bucket
+#    object_name="-"     # Aquí va el nombre/ruta de best_model.pkl
+#)
 
 # ==========================
 # Keyword extraction
@@ -64,11 +72,6 @@ def process_keywords (data: dict) -> tuple:
     # Normaliza el texto para facilitar la búsqueda de keywords.
     cleaned_text = clean_text(raw_text)
 
-    catalog = load_keyword_catalog("keyword_catalog_v2.json")
-
-    keywords = extract_canonical_keywords(cleaned_text, catalog)
-    if not keywords:
-        keywords = extract_fallback_keywords(cleaned_text)
     # Carga el catálogo de keywords predefinido.
     catalog = load_keyword_catalog()
 

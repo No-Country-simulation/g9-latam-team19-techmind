@@ -8,8 +8,27 @@ import oci
 # Model loading
 # ==========================
 
+def load_model(filename="best_model.pkl"):
+    """
+    Load the trained classification model and encoder from a local pickle file.
 
-def load_model(
+    Parameters:
+    - filename: name/path of the local pickle file.
+
+    Returns:
+    - tuple: Trained classification model and label encoder.
+    """
+
+    # Cargar el archivo .pkl desde la ubicación local.
+    model_data = joblib.load(filename)
+
+    # Separar el modelo y el encoder que fueron guardados juntos.
+    best_model = model_data["model"]
+    encoder = model_data["encoder"]
+
+    return best_model, encoder
+    
+def load_model_oci(
     config_file="-",
     profile="-",
     namespace="-",
