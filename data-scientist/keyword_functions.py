@@ -1,41 +1,75 @@
-
 import json
 import re
+
+from pathlib import Path
+from collections import Counter
 
 # ==========================
 # Text preprocessing
 # ==========================
 
+FALLBACK_STOPWORDS = {
+    # Spanish
+    "a", "al", "algo", "algunas", "algunos",
+    "ante", "antes", "como", "con", "contra",
+    "cual", "cuando", "de", "del", "desde",
+    "donde", "durante", "e", "el", "ella",
+    "ellas", "ellos", "en", "entre", "era",
+    "es", "esa", "ese", "eso", "esta",
+    "este", "esto", "estos", "fue", "ha",
+    "hasta", "hay", "la", "las", "le",
+    "les", "lo", "los", "más", "me",
+    "mi", "muy", "no", "nos", "o",
+    "para", "pero", "por", "porque", "que",
+    "se", "sin", "sobre", "son", "su",
+    "sus", "también", "te", "tiene", "tu",
+    "un", "una", "uno", "unos", "unas",
+    "varias", "varios", "y", "ya",
+
+    # English
+    "a", "an", "and", "are", "as", "at",
+    "be", "been", "but", "by", "can",
+    "for", "from", "had", "has", "have",
+    "he", "her", "his", "how", "i",
+    "if", "in", "into", "is", "it",
+    "its", "more", "not", "of", "on",
+    "or", "our", "she", "so", "than",
+    "that", "the", "their", "them", "then",
+    "there", "these", "they", "this", "those",
+    "to", "was", "we", "were", "what",
+    "when", "where", "which", "who", "will",
+    "with", "you", "your"
+}
 
 def extract_text(data: dict) -> str:
-  """
-  Extract the title and text fields and combine them into a single input string.
-  """
+    """
+    Extract the title and text fields and combine them into a single input string.
+    """
 
-  #extraigo titulo y texto por separado del json
-  title = data["title"]
-  text = data["text"]
+    #extraigo titulo y texto por separado del json
+    title = data["title"]
+    text = data["text"]
 
-  #uno titulo y texto en una sola entrada
-  raw_text = f"{title}. {text}"
+    #uno titulo y texto en una sola entrada
+    raw_text = f"{title}. {text}"
 
-  return raw_text
+    return raw_text
 
 
 def clean_text(raw_text: str) -> str:
-  """
-  Normalize the input text by applying basic preprocessing steps.
-  """
-  # Convertimos a minúsculas
-  cleaned_text = raw_text.lower()
+    """
+    Normalize the input text by applying basic preprocessing steps.
+    """
+    # Convertimos a minúsculas
+    cleaned_text = raw_text.lower()
 
-  # Reemplazar saltos de línea por espacios
-  cleaned_text = cleaned_text.replace("\n", " ")
+    # Reemplazar saltos de línea por espacios
+    cleaned_text = cleaned_text.replace("\n", " ")
 
-  # Eliminar espacios múltiples. Deja solo un espacio entre palabras y entre párrafos
-  cleaned_text = " ".join(cleaned_text.split())
+    # Eliminar espacios múltiples. Deja solo un espacio entre palabras y entre párrafos
+    cleaned_text = " ".join(cleaned_text.split())
 
-  return cleaned_text
+    return cleaned_text
 
 
 # ==========================
@@ -43,32 +77,150 @@ def clean_text(raw_text: str) -> str:
 # ==========================
 
 
-def load_keyword_catalog(filename: str ="keyword_catalog.json") -> list:
-  """
-  Import the keyword catalog JSON file that contains a list of keywords from the knowledge base
-  """
-  with open(filename, "r", encoding="utf-8") as file:
-      catalog = json.load(file)
+def load_keyword_catalog(filename: str = "keyword_catalog_v2.json") -> dict[str, list[str]]:
+    """
+    Import the keyword catalog JSON file that contains a list of keywords from the knowledge base
+    The path is resolved relative to this module.
+    """
 
-  return catalog
+    base_dir = Path(__file__).resolve().parent
+    path_del_catalogo = base_dir / filename
+
+    with path_del_catalogo.open("r", encoding="utf-8") as file:
+        catalog = json.load(file)
+    return catalog
 
 
 def extract_keywords(cleaned_text: str, catalog: list) -> list:
-  """
-  Extract keywords from text by matching complete words and phrases
-  against the predefined keyword catalog.
-  """
-  keywords = []
+    """
+    Extract keywords from text by matching complete words and phrases
+    against the predefined keyword catalog.
+    """
+    keywords = []
 
-  for keyword in catalog:
+    for keyword in catalog:
 
-    # Busca la keyword como una palabra o frase completa.
-    # re.escape() evita problemas con caracteres especiales (ej. "node.js").
-    pattern = r"\b" + re.escape(keyword) + r"\b"
+        # Busca la keyword como una palabra o frase completa.
+        # re.escape() evita problemas con caracteres especiales (ej. "node.js").
+        pattern = rf"(?<!\w){re.escape(keyword)}(?!\w)"
 
-    if re.search(pattern, cleaned_text):
-      keywords.append(keyword)
+        if re.search(pattern, cleaned_text) and keyword not in keywords:
+            keywords.append(keyword)
 
-  return keywords
+    return keywords
 
+def extract_canonical_keywords(
+        cleaned_text: str,
+        catalog: dict[str, list[str]]
+) -> list[str]:
+    """
+    Extract canonical technical keywords from text.
 
+    Longer and more specific matches have priority over
+    shorter matches that overlap with them.
+    """
+
+    matches = []
+
+    # 1. Find every possible match
+    for canonical_keyword, aliases in catalog.items():
+
+        complete_catalog = [canonical_keyword, *aliases]
+
+        for keyword in complete_catalog:
+            pattern = rf"(?<!\w){re.escape(keyword)}(?!\w)"
+
+            for match in re.finditer(pattern, cleaned_text):
+                matches.append({
+                    "canonical": canonical_keyword,
+                    "start": match.start(),
+                    "end": match.end()
+                })
+
+    # 2. Prioritize longer matches
+    matches.sort(
+        key=lambda item: item["end"] - item["start"],
+        reverse=True
+    )
+
+    selected_matches = []
+
+    # 3. Discard matches that overlap with a more specific one
+    for match in matches:
+
+        overlaps = any(
+            match["start"] < selected["end"]
+            and match["end"] > selected["start"]
+            for selected in selected_matches
+        )
+
+        if not overlaps:
+            selected_matches.append(match)
+
+    # 4. Restore the order in which concepts appear in the text
+    selected_matches.sort(key=lambda item: item["start"])
+
+    # 5. Return each canonical concept only once
+    keywords = []
+
+    for match in selected_matches:
+        canonical_keyword = match["canonical"]
+
+        if canonical_keyword not in keywords:
+            keywords.append(canonical_keyword)
+
+    return keywords
+
+def extract_fallback_keywords(
+        cleaned_text: str,
+        max_keywords: int = 5
+) -> list[str]:
+    """
+    Extract relevant keywords when the technical catalog
+    does not contain matches.
+
+    Candidates are ranked by:
+    1. Frequency.
+    2. Word length.
+    3. First appearance in the text.
+    """
+
+    tokens = re.findall(
+        r"\b[\wáéíóúüñ-]+\b",
+        cleaned_text,
+        flags=re.UNICODE
+    )
+
+    candidates = []
+    first_position = {}
+
+    for position, token in enumerate(tokens):
+
+        if token in FALLBACK_STOPWORDS:
+            continue
+
+        if token.isdigit():
+            continue
+
+        # Three characters allows useful terms such as
+        # RAG, LLM, SAP, etc.
+        if len(token) < 3:
+            continue
+
+        candidates.append(token)
+
+        if token not in first_position:
+            first_position[token] = position
+
+    frequencies = Counter(candidates)
+
+    ranked_keywords = sorted(
+        frequencies,
+        key=lambda token: (
+            -frequencies[token],
+            -len(token),
+            first_position[token]
+        )
+    )
+
+    return ranked_keywords[:max_keywords]
