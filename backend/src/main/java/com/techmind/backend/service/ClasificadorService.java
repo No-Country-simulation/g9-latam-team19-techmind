@@ -27,12 +27,7 @@ public class ClasificadorService {
         String urlPython = "http://localhost:8000/contenido";
 
         // Contruir la API / Data Science
-        PrediccionDTO responseDTO;
-        try {
-            responseDTO = restTemplate.postForObject(urlPython, request, PrediccionDTO.class);
-        } catch (Exception e) {
-            throw new RuntimeException("La respuesta del servicio de IA fallo.");
-        }
+        PrediccionDTO responseDTO = restTemplate.postForObject(urlPython, request, PrediccionDTO.class);;
 
         // 1. Instanciamos Contenido
         Contenido contenido = new Contenido();

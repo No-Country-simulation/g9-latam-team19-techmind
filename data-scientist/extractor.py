@@ -73,10 +73,13 @@ def process_keywords (data: dict) -> tuple:
     cleaned_text = clean_text(raw_text)
 
     # Carga el catálogo de keywords predefinido.
-    catalog = load_keyword_catalog()
+    catalog = load_keyword_catalog("keyword_catalog_v2.json")
 
     # Busca las keywords del catálogo que aparecen en el texto.
-    keywords = extract_keywords(cleaned_text, catalog)
+    keywords = extract_canonical_keywords(cleaned_text, catalog)
+
+    if not keywords:
+        keywords = extract_fallback_keywords(cleaned_text)
 
     return cleaned_text, keywords
 
