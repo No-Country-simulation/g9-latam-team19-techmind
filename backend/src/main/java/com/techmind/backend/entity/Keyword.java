@@ -1,9 +1,13 @@
 package com.techmind.backend.entity;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 
 @Entity
 @Table(name = "keyword")
+@SQLDelete(sql = "UPDATE keyword SET activo = false WHERE id = ?")
+@SQLRestriction("activo = true")
 public class Keyword {
 
     @Id
@@ -12,6 +16,9 @@ public class Keyword {
 
     @Column(nullable = false)
     private String keyword;
+
+    @Column(nullable = false)
+    private Boolean activo = true;
 
     // Agregamos FetchType.LAZY para optimizar el rendimiento de las consultas
     @ManyToOne(fetch = FetchType.LAZY)
@@ -38,6 +45,9 @@ public class Keyword {
     public void setKeyword(String keyword) {
         this.keyword = keyword;
     }
+
+    public Boolean getActivo() {return activo;}
+    public void setActivo(Boolean activo) {this.activo = activo;}
 
     public Prediccion getPrediccion() {
         return prediccion;

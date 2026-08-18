@@ -1,7 +1,11 @@
 
 import io
 import joblib
-import oci
+
+try:
+    import oci
+except ImportError:
+    oci = None
 
 
 # ==========================
@@ -48,6 +52,11 @@ def load_model_oci(
     Output:
         tuple: Trained classification model and label encoder.
     """
+    
+    if oci is None:
+        raise ImportError(
+            "El paquete 'oci' no está instalado. Instálalo con 'pip install oci' para usar esta función."
+        )
 
     # Carga las credenciales y configuración de OCI.
     config = oci.config.from_file(
