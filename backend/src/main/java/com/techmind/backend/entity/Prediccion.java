@@ -1,12 +1,17 @@
 package com.techmind.backend.entity;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
+
 import java.util.ArrayList;
 import java.util.List;
 
 
 @Entity
 @Table(name = "prediccion")
+@SQLDelete(sql = "UPDATE prediccion SET activo = false WHERE id = ?")
+@SQLRestriction("activo = true")
 public class Prediccion {
 
     @Id
@@ -18,6 +23,9 @@ public class Prediccion {
 
     @Column(nullable = false)
     private Double confidence;
+
+    @Column(nullable = false)
+    private Boolean activo = true;
 
     @OneToOne
     @JoinColumn(name = "contenido_id", nullable = false)
@@ -59,6 +67,14 @@ public class Prediccion {
     }
     public void setConfidence(Double confidence) {
         this.confidence = confidence;
+    }
+
+    public Boolean getActivo() {
+        return activo;
+    }
+
+    public void setActivo(Boolean activo) {
+        this.activo = activo;
     }
 
     public Contenido getContenido() {

@@ -6,6 +6,7 @@ import com.techmind.backend.dto.DataScienceResponseDto;
 import com.techmind.backend.entity.Contenido;
 import com.techmind.backend.entity.Keyword;
 import com.techmind.backend.entity.Prediccion;
+import com.techmind.backend.exception.ResourceNotFoundException;
 import com.techmind.backend.repository.ContenidoRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -61,5 +62,33 @@ public class ContenidoService {
     public Optional<ContenidoResponseDto> obtenerPorId(Long id) {
         return contenidoRepository.findById(id)
                 .map(ContenidoResponseDto::deEntidad);
+    }
+
+    @Transactional
+    public void eliminarContenido(Long id) {
+        // 1. Desactivar el contenido principal
+        int filasAfectadas = contenidoRepository.desactivarContenidoPorId(id);
+
+        if (filasAfectadas == 0) {
+            throw new ResourceNotFoundException("El contenido con ID " + id + " no existe.");
+        }
+
+        // 2. Desactivar en cascada su predicción y sus keywords
+        contenidoRepository.desactivarPrediccionPorContenidoId(id);
+        contenidoRepository.desactivarKeywordsPorContenidoId(id);
+    }
+
+    @Transactional
+    public void restaurarContenido(Long id) {
+        // 1. Restaurar el registro principal en la tabla contenido
+        int filasAfectadas = contenidoRepository.restaurarContenidoPorId(id);
+
+        if (filasAfectadas == 0) {
+            throw new ResourceNotFoundException("No se encontró el contenido con ID " + id + " para restaurar.");
+        }
+
+        // 2. Restaurar la predicción y palabras clave en cascada
+        contenidoRepository.restaurarPrediccionPorContenidoId(id);
+        contenidoRepository.restaurarKeywordsPorContenidoId(id);
     }
 }
