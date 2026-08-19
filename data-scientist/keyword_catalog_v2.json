@@ -586,5 +586,22 @@
   "least privilege": [
     "principle of least privilege",
     "principio de mínimo privilegio"
+  ],
+  "front-end": [
+    "frontend",
+    "front end"
+  ],
+  "back-end": [
+    "backend",
+    "back end"
+  ],
+  "sitio web": [
+    "web site",
+    "sitio-web"
+  ],
+  "devops": [
+    "dev-ops",
+    "dev ops",
+    "development operations"
   ]
 }
