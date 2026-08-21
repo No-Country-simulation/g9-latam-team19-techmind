@@ -47,6 +47,14 @@ public record ContenidoResponseDto(
                         .map(Keyword::getKeyword)
                         .toList();
             }
+
+            // Mapeo de la lista de Recomendaciones
+            if (contenido.getPrediccion().getRecomendaciones() != null) {
+                recommendations = contenido.getPrediccion().getRecomendaciones().stream()
+                        .filter(recom -> recom.getActivo() == null || recom.getActivo()) // Filtra solo activas
+                        .map(RecomendacionDTO::deEntidad) // O el nombre del metodo mapper en tu RecomendacionDTO
+                        .toList();
+            }
         }
 
         return new ContenidoResponseDto(

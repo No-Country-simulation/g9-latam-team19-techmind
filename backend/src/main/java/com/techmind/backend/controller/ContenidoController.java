@@ -70,9 +70,7 @@ public class ContenidoController {
     })
     public ResponseEntity<ContenidoResponseDto> obtenerPorId(
             @PathVariable @NotNull @Min(value = 1, message = "El ID debe ser mayor a 0") Long id) {
-        return contenidoService.obtenerPorId(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        return ResponseEntity.ok(contenidoService.obtenerPorId(id));
     }
 
     // DELETE /api/contenido/{id} -> Oculta el registro cambiando activo a false

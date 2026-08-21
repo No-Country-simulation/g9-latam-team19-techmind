@@ -77,9 +77,11 @@ public class ContenidoService {
     }
 
     @Transactional(readOnly = true)
-    public Optional<ContenidoResponseDto> obtenerPorId(Long id) {
+    public ContenidoResponseDto obtenerPorId(Long id) {
         return contenidoRepository.findById(id)
-                .map(ContenidoResponseDto::deEntidad);
+                .filter(Contenido::getActivo)
+                .map(ContenidoResponseDto::deEntidad)
+                .orElseThrow(() -> new ResourceNotFoundException("No se encontró la recomendación con el ID: " + id));
     }
 
     @Transactional
