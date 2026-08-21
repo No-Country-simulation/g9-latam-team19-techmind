@@ -1,13 +1,14 @@
 package com.techmind.backend.service;
 
 import com.techmind.backend.dto.RecomendacionResponseDto;
+import com.techmind.backend.entity.Recomendacion;
+import com.techmind.backend.exception.ResourceNotFoundException;
 import com.techmind.backend.repository.RecommendationsRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-import com.techmind.backend.entity.Recomendacion;
 
 @Service
 public class RecomendacionService {
@@ -22,7 +23,6 @@ public class RecomendacionService {
 
     @Transactional(readOnly = true)
     public List<RecomendacionResponseDto> obtenerTodas() {
-
         return recommendationsRepository.findAll()
                 .stream()
                 .filter(Recomendacion::getActivo)
@@ -31,14 +31,18 @@ public class RecomendacionService {
     }
 
     @Transactional(readOnly = true)
-    public Optional<RecomendacionResponseDto> obtenerPorId(Long id) {
+    public RecomendacionResponseDto obtenerPorId(Long id) {
         return recommendationsRepository.findById(id)
                 .filter(Recomendacion::getActivo)
-                .map(RecomendacionResponseDto::deEntidad);
+                .map(RecomendacionResponseDto::deEntidad)
+                .orElseThrow(() -> new ResourceNotFoundException("No se encontró la recomendación con el ID: " + id));
     }
 
     @Transactional(readOnly = true)
     public List<RecomendacionResponseDto> obtenerPorLanguage(String language) {
+        if (!recommendationsRepository.existsByLanguageIgnoreCaseAndActivoTrue(language)) {
+            throw new ResourceNotFoundException("No se encontraron recomendaciones para el idioma: " + language);
+        }
         return recommendationsRepository
                 .findByLanguageIgnoreCaseAndActivoTrue(language)
                 .stream()
@@ -48,6 +52,9 @@ public class RecomendacionService {
 
     @Transactional(readOnly = true)
     public List<RecomendacionResponseDto> obtenerPorLevel(String level) {
+        if (!recommendationsRepository.existsByLevelIgnoreCaseAndActivoTrue(level)) {
+            throw new ResourceNotFoundException("No se encontraron recomendaciones para el nivel: " + level);
+        }
         return recommendationsRepository
                 .findByLevelIgnoreCaseAndActivoTrue(level)
                 .stream()
@@ -57,6 +64,9 @@ public class RecomendacionService {
 
     @Transactional(readOnly = true)
     public List<RecomendacionResponseDto> obtenerPorCategoria(String category) {
+        if (!recommendationsRepository.existsByCategoryRecsIgnoreCaseAndActivoTrue(category)) {
+            throw new ResourceNotFoundException("No se encontraron recomendaciones para la categoría: " + category);
+        }
         return recommendationsRepository
                 .findByCategoryRecsIgnoreCaseAndActivoTrue(category)
                 .stream()
@@ -66,6 +76,9 @@ public class RecomendacionService {
 
     @Transactional(readOnly = true)
     public List<RecomendacionResponseDto> obtenerPorTipo(String type) {
+        if (!recommendationsRepository.existsByTypeIgnoreCaseAndActivoTrue(type)) {
+            throw new ResourceNotFoundException("No se encontraron recomendaciones para el tipo: " + type);
+        }
         return recommendationsRepository
                 .findByTypeIgnoreCaseAndActivoTrue(type)
                 .stream()
