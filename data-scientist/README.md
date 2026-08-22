@@ -528,40 +528,108 @@ Esto permite que el resultado final contenga únicamente la información necesar
 
 ---
 
-# ☁️ Integración con Oracle Cloud Infrastructure
+# ☁️ Despliegue del módulo Data Science en Oracle Cloud Infrastructure
 
-La base de conocimiento y el modelo de clasificación se almacenan en Oracle Cloud Infrastructure (OCI).
+## Descripción general
 
-Se utiliza OCI Object Storage para acceder a estos recursos durante la ejecución del pipeline.
+El módulo de Data Science de **TechMind** se desplegó en una máquina virtual de **Oracle Cloud Infrastructure (OCI)** con Oracle Linux 8.
 
-La arquitectura es:
+Este módulo está desarrollado en Python y utiliza **FastAPI** como framework web y **Uvicorn** como servidor ASGI. Su responsabilidad es recibir información de contenido, procesarla mediante los modelos y funciones del proyecto, extraer palabras clave, clasificar el contenido y devolver recomendaciones.
 
-    Oracle Cloud Infrastructure
-            |
-            +-------------------------+
-            |                         |
-            v                         v
-    Knowledge Base              Model + Encoder
-         JSON                         PKL
-            |                         |
-            v                         v
-    load_knowledge_base()       load_model()
-            |                         |
-            +------------+------------+
-                         |
-                         v
-                  Data Science
-                    Pipeline
+En el entorno desplegado, FastAPI no se inicia manualmente cada vez que alguien entra por SSH. En su lugar, se configuró como un servicio administrado por **systemd**, de forma similar a cualquier otro servicio del sistema operativo.
 
-Los parámetros necesarios para conectarse a OCI incluyen:
+El servicio creado se denomina:
 
-- OCI configuration file.
-- Profile.
-- Namespace.
-- Bucket name.
-- Object name.
+```text
+techmind-python.service
+```
 
-Estos valores deben configurarse en el entorno correspondiente antes de ejecutar el pipeline.
+La arquitectura interna es:
+
+```text
+Spring Boot
+    |
+    | HTTP interno
+    v
+FastAPI
+127.0.0.1:8000
+    |
+    +-- Clasificación
+    +-- Extracción de keywords
+    +-- Modelo de Machine Learning
+    +-- Generación de recomendaciones
+```
+
+FastAPI se utiliza como un servicio interno: el cliente final no necesita conectarse directamente a él.
+
+---
+
+## Organización del entorno de producción
+
+Durante las primeras pruebas del proyecto se utilizó el directorio personal del usuario de Oracle Linux:
+
+```text
+/home/opc
+```
+
+Este directorio es adecuado para tareas como:
+
+- pruebas manuales;
+- experimentos;
+- clonaciones temporales;
+- ejecución de comandos;
+- archivos personales del usuario.
+
+Sin embargo, para dejar la aplicación ejecutándose como un servicio permanente se decidió separar el entorno de trabajo del entorno de ejecución.
+
+El código utilizado por los servicios se colocó en:
+
+```text
+/opt/techmind
+```
+
+y los componentes generados específicamente para ejecutar Python se colocaron en:
+
+```text
+/opt/techmind-runtime
+```
+
+La estructura resultante es aproximadamente:
+
+```text
+/opt
+├── techmind
+│   ├── backend
+│   ├── data-scientist
+│   │   ├── api.py
+│   │   ├── extractor.py
+│   │   ├── model_functions.py
+│   │   ├── recommendation_functions.py
+│   │   ├── keyword_functions.py
+│   │   ├── best_model.pkl
+│   │   ├── keyword_catalog.json
+│   │   ├── keyword_catalog_v2.json
+│   │   ├── knowledge_base.json
+│   │   └── ...
+│   └── frontend
+│
+└── techmind-runtime
+    ├── venv
+    └── hf-cache
+```
+
+---
+
+## ¿Por qué se utiliza `/opt`?
+
+En sistemas Linux, `/opt` se utiliza habitualmente para aplicaciones o software adicional instalado en el servidor que no forma parte directamente del sistema operativo.
+
+Por esta razón se eligió:
+
+```text
+/opt/techmind
+... (854 lines left)
+```
 
 ---
 
