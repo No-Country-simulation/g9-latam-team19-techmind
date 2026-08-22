@@ -5,10 +5,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Repository
 public interface RecommendationsRepository extends JpaRepository<Recomendacion, Long> {
+
+    // Método para verificar si la recomendación ya existe en BD mediante su ID de Data Science
+    Optional<Recomendacion> findByExternalId(Long externalId);
 
     // Métodos para verificar si el valor existe en el catálogo activo
     List<Recomendacion> findByLanguageIgnoreCaseAndActivoTrue(String language);

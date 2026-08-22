@@ -38,9 +38,9 @@ public class Recomendacion {
     @Column(nullable = false)
     private Boolean activo = true;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "prediccion_id", nullable = false)
-    private Prediccion prediccion;
+    //@ManyToOne(fetch = FetchType.LAZY)
+    //@JoinColumn(name = "prediccion_id", nullable = false)
+    //private Prediccion prediccion;
 
     public Recomendacion() {
     }
@@ -133,11 +133,11 @@ public class Recomendacion {
         this.activo = activo;
     }
 
-    public Prediccion getPrediccion() {
+    /*public Prediccion getPrediccion() {
         return prediccion;
-    }
+    }*/
 
-    public void setPrediccion(Prediccion prediccion) {
+    /*public void setPrediccion(Prediccion prediccion) {
         this.prediccion = prediccion;
-    }
+    }*/
 }
