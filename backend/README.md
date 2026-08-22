@@ -1,4 +1,4 @@
-# TechMind - Backend API REST
+# TechMind Engine - Backend API REST
 
 API REST profesional desarrollada con **Spring Boot 3** e **Java 17+** para la plataforma **TechMind**. El sistema actúa como el núcleo de persistencia, lógica de negocio y orquestación entre clientes frontend y un microservicio externo de inteligencia artificial (**FastAPI**).
 
