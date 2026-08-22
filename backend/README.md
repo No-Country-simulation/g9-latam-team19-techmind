@@ -225,6 +225,109 @@ El `GlobalExceptionHandler` unifica las respuestas de error formateadas en JSON 
 | `504 Gateway Timeout` | `SocketTimeoutException` | La consulta a FastAPI superó el tiempo límite de respuesta (>5 segundos). |
 | `500 Internal Server Error` | `Exception` | Error no controlado dentro de la aplicación. |
 
+# Despliegue del Backend Spring Boot en Oracle Cloud Infrastructure
+
+## Descripción general
+
+El backend de **TechMind Engine** se desplegó en una máquina virtual de **Oracle Cloud Infrastructure (OCI)** utilizando Oracle Linux 8.
+
+El backend está desarrollado con **Java 17 y Spring Boot** y tiene como responsabilidades principales:
+
+- exponer la API REST de TechMind;
+- comunicarse con el servicio de Data Science desarrollado con FastAPI;
+- administrar la lógica de aplicación;
+- persistir información utilizando MySQL;
+- administrar el esquema de la base de datos mediante Flyway;
+- ofrecer los endpoints consumidos posteriormente por el frontend.
+
+Para evitar ejecutar manualmente:
+
+```bash
+java -jar target/backend-0.0.1-SNAPSHOT.jar
+```
+
+cada vez que se inicia la máquina virtual, el backend se configuró como un servicio administrado mediante **systemd**.
+
+El servicio creado se denomina:
+
+```text
+techmind-backend.service
+```
+
+La arquitectura utilizada es:
+
+```text
+                   Cliente
+                      |
+                      v
+               Spring Boot
+                   :8080
+                 /        \
+                /          \
+               v            v
+       FastAPI :8000     MySQL :3306
+       127.0.0.1         localhost
+```
+
+Spring Boot funciona como la fachada de la aplicación. El cliente no necesita acceder directamente ni a FastAPI ni a MySQL.
+
+---
+
+# Organización del entorno de producción
+
+El código utilizado por los servicios se encuentra en:
+
+```text
+/opt/techmind
+```
+
+La estructura es aproximadamente:
+
+```text
+/opt/techmind
+├── backend
+├── data-scientist
+├── frontend
+└── README.md
+```
+
+El backend está específicamente en:
+
+```text
+/opt/techmind/backend
+```
+
+---
+
+## ¿Por qué se utiliza `/opt/techmind`?
+
+Durante las primeras pruebas se utilizó el directorio:
+
+```text
+/home/opc
+```
+
+Este directorio pertenece al usuario `opc` y es adecuado para:
+
+- pruebas;
+- administración;
+- experimentación;
+- compilaciones temporales;
+- comandos manuales.
+
+Sin embargo, se decidió separar ese entorno del código que permanecería ejecutándose continuamente.
+
+Conceptualmente:
+
+```text
+/home/opc
+    |
+    +-- entorno personal
+    +-- pruebas
+    +-- experimentación
+... (1,298 lines left)
+```
+
 ## 📄 Documentación Interactiva
 Una vez ejecutada la aplicación, la documentación OpenAPI interactiva estará disponible en:
 
@@ -273,3 +376,11 @@ Una vez ejecutada la aplicación, la documentación OpenAPI interactiva estará 
 
    *  **Documentación Interactiva (Swagger UI):** Abre `http://localhost:8080/swagger-ui.html` en tu navegador para probar todos los endpoints disponibles de forma gráfica.
    *  **Pruebas vía Postman / cURL:** Puedes consumir directamente los endpoints descritos en la sección de Endpoints de la API (ej. `GET /api/recomendaciones o GET /api/contenido`).
+
+## 👥 Equipo de Desarrollo Backend
+
+| Rol | Nombre | GitHub | LinkedIn |
+| :--- | :--- | :--- | :--- |
+| **Backend Developer & Team Lead** | Juan Camarillo | [@JuanCG115](https://github.com/JuanCG115) | [LinkedIn](https://linkedin.com/in/juan-camarillo-gutierrez) |
+| **Backend Developer** | Valeria Villicaña | [@valeriavip](https://github.com/valeriavip) | [LinkedIn](https://www.linkedin.com/in/valeria-villicana/) |
+| **Backend Developer** | Jorge Marquez | [@kokoro32](https://github.com/kokoro32) | [LinkedIn]() |
