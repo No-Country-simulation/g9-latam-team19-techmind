@@ -17,6 +17,7 @@ import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.net.SocketTimeoutException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -93,10 +94,16 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<Map<String, String>> manejarTipoParametroIncorrecto(MethodArgumentTypeMismatchException ex) {
         Map<String, String> respuesta = new HashMap<>();
-        String tipoEsperado = ex.getRequiredType() != null ? ex.getRequiredType().getSimpleName() : "válido";
+        Class<?> tipoRequerido = ex.getRequiredType();
 
-        respuesta.put("error", String.format("El parámetro '%s' debe ser de tipo %s.", ex.getName(), tipoEsperado));
-
+        if (tipoRequerido != null && tipoRequerido.isEnum()) {
+            String opcionesValidas = Arrays.toString(tipoRequerido.getEnumConstants());
+            respuesta.put("error", String.format("El valor '%s' no es válido para el parámetro '%s'. Opciones válidas: %s",
+                    ex.getValue(), ex.getName(), opcionesValidas));
+        } else {
+            String tipoEsperado = tipoRequerido != null ? tipoRequerido.getSimpleName() : "válido";
+            respuesta.put("error", String.format("El parámetro '%s' debe ser de tipo %s.", ex.getName(), tipoEsperado));
+        }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(respuesta); // HTTP 400
     }
 
@@ -139,7 +146,14 @@ public class GlobalExceptionHandler {
             if (campo.contains(".")) {
                 campo = campo.substring(campo.lastIndexOf('.') + 1);
             }
-            errores.put(campo, violation.getMessage());
+            String mensajeNuevo = violation.getMessage();
+            if (errores.containsKey(campo)) {
+                if (mensajeNuevo.toLowerCase().contains("vacío") || mensajeNuevo.toLowerCase().contains("vacia")) {
+                    errores.put(campo, mensajeNuevo);
+                }
+            } else {
+                errores.put(campo, mensajeNuevo);
+            }
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errores); // HTTP 400
     }
