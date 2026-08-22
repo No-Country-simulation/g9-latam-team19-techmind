@@ -168,7 +168,7 @@ Respuesta Exitosa (`201 Created`):
 }
 ```
 
-2. Catálogo de Recomendaciones (`/api/recomendaciones`)
+## Catálogo de Recomendaciones (`/api/recomendaciones`)
 
 | Método | Endpoint | Parámetro Query | Descripción |
 | :--- | :--- | :--- | :--- |
@@ -179,7 +179,7 @@ Respuesta Exitosa (`201 Created`):
 | `GET` | `/api/recomendaciones` | `language={lang}` | Filtra recomendaciones por idioma |
 | `GET` | `/api/recomendaciones` | `type={tipo}` | Filtra recomendaciones por tipo de recurso |
 
-3. ⚡ Validaciones y Secuenciación
+## ⚡ Validaciones y Secuenciación
 El proyecto utiliza una estrategia de Validación por Secuencia Estricta (`ValidationGroups.SecuenciaOrdenada`) para evitar la acumulación de mensajes redundantes:
 
   * PrimerGrupo: Verifica la presencia y vacíos del dato (`@NotBlank`, `@NotNull`).
@@ -201,7 +201,7 @@ Si se envía un parámetro de búsqueda vacío o con números en filtros alfabé
 }
 ```
 
-4. 🛡️ Manejo Global de Excepciones y Resiliencia
+## 🛡️ Manejo Global de Excepciones y Resiliencia
 El `GlobalExceptionHandler` unifica las respuestas de error formateadas en JSON para toda la aplicación:
 
 | Status Code | Excepción Interceptada | Causa / Descripción |
@@ -215,8 +215,51 @@ El `GlobalExceptionHandler` unifica las respuestas de error formateadas en JSON 
 | `504 Gateway Timeout` | `SocketTimeoutException` | La consulta a FastAPI superó el tiempo límite de respuesta (>5 segundos). |
 | `500 Internal Server Error` | `Exception` | Error no controlado dentro de la aplicación. |
 
-5. 📄 Documentación Interactiva
+## 📄 Documentación Interactiva
 Una vez ejecutada la aplicación, la documentación OpenAPI interactiva estará disponible en:
 
 * Swagger UI: http://localhost:8080/swagger-ui.html
 * API Docs (JSON): http://localhost:8080/v3/api-docs
+
+## 🚀 Instalación y Ejecución Local
+
+### Prerrequisitos
+* **Java 17** o superior.
+* **Maven 3.8+** (o utilizar el wrapper `./mvnw` incluido en el proyecto).
+* **MySQL 8.0+** en ejecución local.
+* Microservicio de IA (**FastAPI**) en ejecución en `http://localhost:8000` (opcional si solo se prueban endpoints de catálogo).
+
+---
+
+### Pasos para Ejecutar
+
+1. **Clonar el repositorio y navegar al proyecto:**
+   ```bash
+   git clone <https://github.com/No-Country-simulation/g9-latam-team19-techmind.git>
+   cd backend
+   ```
+
+2. **Crear la Base de Datos en MySQL:**
+   Crea la base de datos localmente desde tu cliente o CLI de MySQL:
+   ```bash
+   CREATE DATABASE techmind;
+   ```
+
+3. **Configurar credenciales:**
+   Verifica las propiedades en `src/main/resources/application.properties` y define tus credenciales locales de MySQL:
+   ```bash
+   spring.datasource.username=tu_usuario
+   spring.datasource.password=tu_contraseña
+   ```
+
+4. **Ejecutar migraciones y levantar la aplicación:**
+   Flyway se encargará de ejecutar los scripts SQL contenidos en `db/migration` al iniciar el servidor:
+   ```bash
+   ./mvnw spring-boot:run
+   ```
+
+5. **🧪 Pruebas de Endpoints**
+   Una vez iniciada la aplicación (`http://localhost:8080`), puedes realizar pruebas directamente sin depender del cliente web:
+
+   *  **Documentación Interactiva (Swagger UI):** Abre `http://localhost:8080/swagger-ui.html` en tu navegador para probar todos los endpoints disponibles de forma gráfica.
+   *  **Pruebas vía Postman / cURL:** Puedes consumir directamente los endpoints descritos en la sección de Endpoints de la API (ej. `GET /api/recomendaciones o GET /api/contenido`).
