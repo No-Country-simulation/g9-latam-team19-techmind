@@ -66,6 +66,7 @@ src
         │   ├── V2__add_activo_column.sql
         │   ├── V3__add_activo_to_relations.sql
         │   └── V4__add_recomendacion_table.sql
+        |   └── V5__conver_to_many_to_many_recommendations.sql
         └── application.properties
 ```
 
@@ -97,6 +98,15 @@ python.api.url=http://localhost:8000
 springdoc.api-docs.enabled=true
 springdoc.swagger-ui.enabled=true
 ```
+
+## 🏛️ Modelo de Datos y Catálogo Reutilizable
+La entidad `Recomendacion` funciona como un catálogo general reutilizable mediante una relación `@ManyToMany` con `Prediccion` respaldada por la tabla intermedia `prediccion_recomendacion`:
+
+* **Optimización de Persistencia:** Se utiliza la restricción `UNIQUE (external_id)` para evitar registros duplicados.
+
+* **Idempotencia:** Al procesar una nueva consulta de IA, el sistema verifica la existencia de la recomendación antes de insertar una nueva fila, reutilizando las existentes en la BD.
+
+* **Aislamiento en Borrado Lógico:** La desactivación (`activo = false`) de un registro de `Contenido` solo oculta su `Prediccion` y sus `Keywords`. Las recomendaciones pertenecientes al catálogo global permanecen intactas para no afectar otros contenidos vinculados.
 
 ## 🚀 Endpoints de la API
 1. Procesamiento y Gestión de Contenido (`/api/contenido`)
