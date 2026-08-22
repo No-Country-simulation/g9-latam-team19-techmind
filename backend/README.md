@@ -383,4 +383,4 @@ Una vez ejecutada la aplicación, la documentación OpenAPI interactiva estará 
 | :--- | :--- | :--- | :--- |
 | **Backend Developer & Team Lead** | Juan Camarillo | [@JuanCG115](https://github.com/JuanCG115) | [LinkedIn](https://linkedin.com/in/juan-camarillo-gutierrez) |
 | **Backend Developer** | Valeria Villicaña | [@valeriavip](https://github.com/valeriavip) | [LinkedIn](https://www.linkedin.com/in/valeria-villicana/) |
-| **Backend Developer** | Jorge Marquez | [@kokoro32](https://github.com/kokoro32) | [LinkedIn]() |
+| **Backend Developer** | Jorge Marquez | [@kokoro32](https://github.com/kokoro32) | [LinkedIn](https://www.linkedin.com/in/marquez-miguel-jorge-luis/) |
