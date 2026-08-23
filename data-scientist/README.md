@@ -69,7 +69,8 @@ El módulo está diseñado para integrarse con Backend mediante la función prin
     │   ├── extract_text()
     │   ├── clean_text()
     │   ├── load_keyword_catalog()
-    │   └── extract_keywords()
+    │   ├── extract_canonical_keywords()
+    │   └── extract_fallback_keywords()
     │
     ├── model_functions.py
     │   ├── load_model()
@@ -85,8 +86,8 @@ El módulo está diseñado para integrarse con Backend mediante la función prin
     │   ├── select_recommendations()
     │   └── format_recommendations()
     │
-    ├── keyword_catalog.json
-    │   └── Lista de keywords utilizada para la extracción
+    ├── keyword_catalog_v2.json
+    │   └── Diccionario de keywords canónicas y aliases utilizado para la extracción
     │
     ├── update_catalog.ipynb
     │   └── Notebook para actualizar el catálogo de keywords
@@ -199,7 +200,7 @@ Ejemplo:
 
 ### Propósito
 
-Contiene las funciones utilizadas para procesar el texto y detectar keywords relevantes a partir de un catálogo predefinido.
+Contiene las funciones utilizadas para procesar el texto, detectar keywords canónicas a partir de un catálogo predefinido y extraer keywords representativas mediante un mecanismo de fallback cuando no existen coincidencias en el catálogo.
 
 ### `extract_text(data: dict) -> str`
 
@@ -213,15 +214,27 @@ Normaliza el texto mediante:
 - Eliminación de saltos de línea.
 - Eliminación de espacios múltiples.
 
-### `load_keyword_catalog(filename: str) -> list`
+### `load_keyword_catalog(filename: str) -> dict[str, list[str]]`
 
-Carga el catálogo de keywords desde `keyword_catalog.json`.
+Carga el catálogo de keywords desde `keyword_catalog_v2.json`.
 
-### `extract_keywords(cleaned_text: str, catalog: list) -> list`
+El catálogo utiliza un diccionario donde cada clave representa una keyword canónica y su valor contiene una lista de aliases asociados.
 
-Busca las keywords presentes en el texto utilizando el catálogo predefinido.
+### `extract_canonical_keywords(cleaned_text: str, catalog: dict[str, list[str]]) -> list[str]`
 
-La búsqueda utiliza expresiones regulares para identificar palabras y frases completas y evitar coincidencias accidentales dentro de otras palabras.
+Busca las keywords canónicas presentes en el texto utilizando el catálogo predefinido.
+
+La búsqueda evalúa tanto la keyword canónica como sus aliases mediante expresiones regulares para identificar palabras y frases completas. Cuando se encuentra un alias, se devuelve la keyword canónica correspondiente.
+
+Las coincidencias más largas y específicas tienen prioridad sobre coincidencias más cortas que se solapen. Cada concepto canónico se devuelve una sola vez respetando el orden en el que aparece en el texto.
+
+### `extract_fallback_keywords(cleaned_text: str, max_keywords: int = 5) -> list[str]`
+
+Extrae keywords representativas cuando el texto no contiene coincidencias con el catálogo predefinido.
+
+La función tokeniza el texto, descarta stopwords, valores numéricos y términos de menos de tres caracteres, y ordena los candidatos por frecuencia de aparición, longitud y primera aparición en el texto.
+
+Por defecto devuelve hasta 5 keywords.
 
 ---
 
@@ -635,18 +648,28 @@ Por esta razón se eligió:
 
 # 📚 Catálogo de Keywords
 
-El archivo `keyword_catalog.json` contiene la lista de keywords utilizadas durante la extracción.
+El archivo `keyword_catalog_v2.json` contiene el catálogo de keywords utilizado durante la extracción.
+
+El catálogo se organiza como un diccionario (`dict[str, list[str]]`) donde cada clave representa una keyword canónica y su valor contiene una lista de aliases que permiten identificar distintas formas de expresar el mismo concepto.
 
 Ejemplo:
 
-    [
-        "python",
-        "react",
-        "docker",
-        "postgresql"
-    ]
+    {
+        "javascript": [
+            "js"
+        ],
+        "fastapi": [
+            "fast api"
+        ],
+        "node.js": [
+            "nodejs",
+            "node js"
+        ]
+    }
 
-El catálogo puede actualizarse conforme se agreguen nuevas tecnologías o términos relevantes para la base de conocimiento.
+Cuando el texto contiene una keyword canónica o alguno de sus aliases, el pipeline devuelve la keyword canónica correspondiente.
+
+El catálogo puede actualizarse conforme se agreguen nuevas tecnologías, aliases o términos relevantes para la base de conocimiento.
 
 ---
 
