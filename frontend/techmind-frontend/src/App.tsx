@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 
-// --- CONFIGURACIÓN Y CONSTANTES GLOBALES ---
+// --------------- Configuración y Constantes ---------------
 const CATS: Record<string, { color: string; letter: string; kws: string[] }> = {
   "Backend":  { color: "#1F3A5F", letter:"B", kws: ["api","rest","spring","java","node","express","backend","servidor","microservicio","endpoint","controlador","autenticación"] },
   "Frontend": { color: "#7A2E35", letter:"F", kws: ["react","css","html","interfaz","componente","ui","frontend","javascript","vue","angular","diseño","responsive","typescript"] },
@@ -33,7 +33,7 @@ const seedCards = [
 
 export default function App() {
   
-  // --- ESTADOS DE LA APLICACIÓN ---
+  // --------------- Estados de la Aplicación ---------------
   const [cards, setCards] = useState<any[]>(seedCards);
   const [currentView, setCurrentView] = useState<'dashboard' | 'recommend' | 'analyzer'>('dashboard');
   
@@ -58,7 +58,7 @@ export default function App() {
   const [modalMode, setModalMode] = useState<'dashboard' | 'reco' | 'nested'>('dashboard');
   const [dashboardRootId, setDashboardRootId] = useState<string | null>(null);
 
-  // --- EFECTOS SECUNDARIOS ---
+  // --------------- Efectos y Construcción de Datos ---------------
   useEffect(() => {
     if (darkMode) {
       document.body.classList.add('dark-mode');
@@ -67,9 +67,8 @@ export default function App() {
     }
   }, [darkMode]);
 
-  // Construcción y Normalización de Datos
   useEffect(() => {
-    fetch('http://localhost:8080/api/contenido')
+    fetch('/api/contenido')
       .then(res => {
         if (!res.ok) throw new Error("Error en la respuesta del servidor");
         return res.json();
@@ -105,15 +104,22 @@ export default function App() {
             const rawLang = r.language || r.idioma || 'ES';
             const langDisplay = (rawLang.toUpperCase().includes('EN') || rawLang.toUpperCase().includes('ING')) ? 'EN' : 'ES';
             
-            let tipo = r.type || r.tipo || 'Artículo';
-            tipo = tipo.charAt(0).toUpperCase() + tipo.slice(1).toLowerCase();
-            if (tipo === 'Documentacion') tipo = 'Documentación';
+            let tipoRaw = (r.type || r.tipo || 'Artículo').toLowerCase();
+            let tipo = 'Artículo';
+            
+            if (tipoRaw.includes('course') || tipoRaw.includes('curso')) {
+              tipo = 'Curso';
+            } else if (tipoRaw.includes('tutorial')) {
+              tipo = 'Tutorial';
+            } else if (tipoRaw.includes('doc')) {
+              tipo = 'Documentación';
+            }
 
             const rawCatReco = r.categoryRecs || r.category_recs || rawCatPadre;
             const categoriaFinal = CATS[rawCatReco] ? rawCatReco : 'Base de Datos';
 
             allCards.push({
-              id: `db-${c.id}-${i}`,
+              id: `db-${c.id}-${r.id || i}`,
               parentId: `root-${c.id}`, 
               title: r.title || c.title,
               type: tipo,
@@ -137,7 +143,7 @@ export default function App() {
       });
   }, []);
 
-  // --- NAVEGACIÓN ENTRE PESTAÑAS ---
+  // --------------- Navegación y Filtros ---------------
   const handleTabChange = (view: 'dashboard' | 'analyzer' | 'recommend') => {
     if (currentView === 'analyzer' && view !== 'analyzer') {
       setInTitle('');
@@ -148,7 +154,6 @@ export default function App() {
     setCurrentView(view);
   };
 
-  // --- UTILIDADES VISUALES Y FILTROS ---
   const catColor = (cat: string) => CATS[cat] ? CATS[cat].color : "#999";
   const catLetter = (cat: string) => CATS[cat] ? CATS[cat].letter : "?";
 
@@ -169,10 +174,10 @@ export default function App() {
     return matchesCat && matchesLang && matchesQ;
   });
 
-  // --- CONEXIÓN AL BACKEND ---
+  // --------------- Conexión al Backend ---------------
   const handleAnalyzeAndAdd = async () => {
     try {
-      const response = await fetch('http://localhost:8080/api/contenido/procesar', { 
+      const response = await fetch('/api/contenido/procesar', { 
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -245,7 +250,7 @@ export default function App() {
     }
   };
 
-  // --- CONTROLADORES DEL MODAL INTERACTIVO ---
+  // --------------- Controladores del Modal ---------------
   const openDashboardDetail = (id: string) => {
     setSelectedCardId(id);
     setDashboardRootId(id);
@@ -275,7 +280,7 @@ export default function App() {
 
   const isRecommendationView = modalMode === 'reco' || modalMode === 'nested';
 
-  // --- RENDERIZADO DE INTERFAZ ---
+  // --------------- Renderizado de Interfaz ---------------
   return (
     <div>
       <div className="banner">
@@ -301,7 +306,7 @@ export default function App() {
         </svg>
         <div className="banner-content">
           <div className="banner-eyebrow">Hackathon ONE · G9-LATAM-Team 19 · Alura + Oracle</div>
-          <h1 className="banner-title">TECHMIND</h1>
+          <h1 className="banner-title">TECHMIND ENGINE</h1>
           <p className="banner-sub">
             Descubre, organiza y domina los mejores recursos en desarrollo de software y tecnología. Tu evolución técnica comienza aquí.
           </p>
@@ -608,7 +613,6 @@ export default function App() {
         </div>
       )}
 
-      {/* NUEVO TOAST DE ÉXITO */}
       {successMessage && (
         <div className="toast-success">
           <svg className="toast-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
