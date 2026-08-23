@@ -51,7 +51,7 @@ public class GlobalExceptionHandler {
 
         // Si la causa no fue tiempo de espera, es porque el servidor de Python está apagado o inalcanzable
         respuesta.put("error", "El servicio de procesamiento de IA (FastAPI) no está disponible en este momento.");
-        respuesta.put("detalle", "No se pudo establecer conexión con http://localhost:8000.");
+        respuesta.put("detalle", "No se pudo establecer conexión con el servidor.");
 
         return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(respuesta); // HTTP 503
     }
