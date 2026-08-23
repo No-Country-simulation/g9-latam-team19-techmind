@@ -35,7 +35,12 @@ public class Prediccion {
     @OneToMany(mappedBy = "prediccion", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Keyword> keywords = new ArrayList<>();
 
-    @OneToMany(mappedBy = "prediccion", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ManyToMany(cascade = {CascadeType.MERGE})
+    @JoinTable(
+            name = "prediccion_recomendacion",
+            joinColumns = @JoinColumn(name = "prediccion_id"),
+            inverseJoinColumns = @JoinColumn(name = "recomendacion_id")
+    )
     private List<Recomendacion> recomendaciones = new ArrayList<>();
 
     public Prediccion() {
@@ -53,7 +58,7 @@ public class Prediccion {
 
     public void addRecomendacion(Recomendacion recomendacion) {
         recomendaciones.add(recomendacion);
-        recomendacion.setPrediccion(this);
+        //recomendacion.setPrediccion(this);
     }
 
     public Long getId() {
