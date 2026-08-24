@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import './App.css';
 
 // --------------- Configuración y Constantes ---------------
@@ -9,6 +9,24 @@ const CATS: Record<string, { color: string; letter: string; kws: string[] }> = {
   "DevOps":   { color: "#5B4B77", letter:"O", kws: ["docker","kubernetes","ci/cd","pipeline","despliegue","contenedor","infraestructura","devops","automatización"] },
   "Base de Datos": { color: "#B98A2A", letter:"BD", kws: ["sql","mysql","postgresql","mongodb","oracle","database","base de datos","query","esquema","modelado","dax"] }
 };
+
+const getDisplayMatch = (confidence: number): number => {
+  let adjusted = confidence;
+
+  if (confidence > 0.5) {
+    adjusted += 0.4;
+  } else if (confidence > 0.4) {
+    adjusted += 0.35;
+  } else if (confidence > 0.3) {
+    adjusted += 0.2;
+  }
+
+  return Math.min(adjusted, 1);
+};
+
+const VISIBLE_CATS = Object.keys(CATS).filter(
+  cat => cat !== "Data Science"
+);
 
 const TYPES = ["Curso","Artículo","Tutorial","Documentación"];
 const ACTION_LABEL: Record<string, string> = {
@@ -158,15 +176,18 @@ export default function App() {
   const catLetter = (cat: string) => CATS[cat] ? CATS[cat].letter : "?";
 
   const dashFiltered = cards.filter(c => {
-    if (!c.isRoot) return false;
+    if (!c.isRoot || c.cat === "Data Science") return false;
     const matchesCat = dashCatFilter === "Todas" || c.cat === dashCatFilter;
     const q = dashSearch.trim().toLowerCase();
     const matchesQ = !q || c.title.toLowerCase().includes(q) || (c.kw && c.kw.some((k: string) => k.toLowerCase().includes(q)));
     return matchesCat && matchesQ;
-  });
+  }).sort(
+  (a: { id: string | number }, b: { id: string | number }) =>
+    Number(b.id) - Number(a.id)
+);
 
   const recoFiltered = cards.filter(c => {
-    if (c.isRoot) return false;
+    if (c.isRoot || c.cat === "Data Science") return false;
     const matchesCat = recoCatFilter === "Todas" || c.cat === recoCatFilter;
     const matchesLang = recoLangFilter === "Todos" || c.lang === recoLangFilter;
     const q = recoSearch.trim().toLowerCase();
@@ -275,7 +296,7 @@ export default function App() {
   const activeModalCard = cards.find(x => x.id === selectedCardId);
   
   const relatedCardsList = activeModalCard 
-    ? cards.filter(o => !o.isRoot && o.id !== activeModalCard.id && (o.parentId === activeModalCard.id || o.cat === activeModalCard.cat || o.kw.some((k: string) => activeModalCard.kw.includes(k)))).slice(0, 4)
+    ? cards.filter(o => !o.isRoot && o.cat !== "Data Science" && o.id !== activeModalCard.id && (o.parentId === activeModalCard.id || o.cat === activeModalCard.cat || o.kw.some((k: string) => activeModalCard.kw.includes(k)))).slice(0, 4)
     : [];
 
   const isRecommendationView = modalMode === 'reco' || modalMode === 'nested';
@@ -372,7 +393,7 @@ export default function App() {
                 />
               </div>
               <div className="filter-chips">
-                {["Todas", ...Object.keys(CATS)].map(c => (
+                {["Todas", ...VISIBLE_CATS].map(c => (
                   <button key={c} className={`chip ${dashCatFilter === c ? 'active' : ''}`} onClick={() => setDashCatFilter(c)}>{c}</button>
                 ))}
               </div>
@@ -391,7 +412,7 @@ export default function App() {
                     <div className="scard-cat">{c.cat}</div>
                     <h4>{c.title}</h4>
                     <div className="scard-meta">
-                      <span>{Math.round(c.conf * 100)}% match</span>
+                      <span>{Math.round(getDisplayMatch(c.conf) * 100)}% match</span>
                       <span className="arrow">→</span>
                     </div>
                   </div>
@@ -428,9 +449,9 @@ export default function App() {
                     <div className="result-row">
                       <span className="cat-badge" style={{ background: catColor(lastResult.cat) }}>{lastResult.cat}</span>
                       <div className="conf-track">
-                        <div className="conf-fill" style={{ width: `${Math.round(lastResult.conf * 100)}%` }}></div>
+                        <div className="conf-fill" style={{ width: `${Math.round(getDisplayMatch(lastResult.conf) * 100)}%` }}></div>
                       </div>
-                      <span className="conf-num">{Math.round(lastResult.conf * 100)}%</span>
+                      <span className="conf-num">{Math.round(getDisplayMatch(lastResult.conf) * 100)}%</span>
                     </div>
                     <div className="kw-row">
                       {lastResult.kw.map((k: string, i: number) => (
@@ -470,7 +491,7 @@ export default function App() {
                 />
               </div>
               <div className="filter-chips">
-                {["Todas", ...Object.keys(CATS)].map(c => (
+                {["Todas", ...VISIBLE_CATS].map(c => (
                   <button key={c} className={`chip ${recoCatFilter === c ? 'active' : ''}`} onClick={() => setRecoCatFilter(c)}>{c}</button>
                 ))}
               </div>
@@ -498,7 +519,7 @@ export default function App() {
                             <div className="scard-cat">{c.cat} · {c.type}</div>
                             <h4>{c.title}</h4>
                             <div className="scard-meta">
-                              <span>{Math.round(c.conf * 100)}% match</span>
+                              <span>{Math.round(getDisplayMatch(c.conf) * 100)}% match</span>
                               <span className="arrow">→</span>
                             </div>
                           </div>
@@ -556,9 +577,9 @@ export default function App() {
               <h2>{activeModalCard.title}</h2>
               <div className="modal-meta">
                 <div className="conf-track">
-                  <div className="conf-fill" style={{ width: `${Math.round(activeModalCard.conf * 100)}%`, background: catColor(activeModalCard.cat) }}></div>
+                  <div className="conf-fill" style={{ width: `${Math.round(getDisplayMatch(activeModalCard.conf) * 100)}%`, background: catColor(activeModalCard.cat) }}></div>
                 </div>
-                <span className="conf-num">{Math.round(activeModalCard.conf * 100)}%</span>
+                <span className="conf-num">{Math.round(getDisplayMatch(activeModalCard.conf) * 100)}%</span>
               </div>
               <p className="modal-desc">{activeModalCard.desc}</p>
               <div className="modal-kw">
