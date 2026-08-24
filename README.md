@@ -1,50 +1,135 @@
-# TECHMIND ENGINE - Frontend 🚀
+# 🚀 TechMind Engine
 
-Bienvenido al repositorio frontend de Techmind Engine. Este proyecto fue desarrollado para el Hackathon ONE (G9-LATAM - Equipo 19) en colaboración con Alura y Oracle.
+**TechMind Engine** es un catálogo inteligente diseñado para centralizar, organizar y recomendar recursos de aprendizaje tecnológico. La plataforma integra un motor de Inteligencia Artificial que analiza contenido técnico en texto plano, clasifica automáticamente su categoría principal, extrae palabras clave y sugiere recursos educativos relevantes (cursos, artículos y documentación) en tiempo real.
 
-Techmind es un catálogo inteligente diseñado para centralizar, organizar y sugerir recursos de aprendizaje en tecnología. Su principal característica es la integración con un backend de Inteligencia Artificial que analiza y clasifica automáticamente cada nuevo contenido que registras.
-
-## ✨ Características Principales
-
-* Dashboard Central: Una vista principal que muestra todo tu contenido tecnológico organizado en tarjetas, con barra de búsqueda y filtros rápidos por categoría.
-* Análisis Predictivo (IA): Al ingresar un fragmento de texto técnico, la aplicación se comunica con el modelo de IA para detectar la categoría (Backend, Frontend, DevOps, etc.), extraer palabras clave y calcular un porcentaje de confianza. 
-* Recomendaciones Inteligentes: El sistema sugiere automáticamente contenido relacionado (cursos, artículos, documentación) y lo organiza en estantes interactivos con filtros por idioma.
-* Diseño y UX: Implementación de un diseño limpio con CSS puro. Incluye modo oscuro, modales de detalles interactivos y notificaciones para confirmar acciones o reportar errores sin interrumpir la navegación.
-
-## 🛠️ Stack Tecnológico
-
-* Core: React 18
-* Lenguaje: TypeScript
-* Estilos: CSS3 puro (con variables nativas para Theming)
-* Entorno de desarrollo: Vite
-
-## ⚙️ Instalación y Ejecución Local
-
-Para probar el proyecto en tu entorno local, asegúrate de tener instalado Node.js (v16 o superior). 
-
-Importante: Este frontend requiere que el backend de Spring Boot de Techmind esté en ejecución (por defecto en http://localhost:8080) junto con su base de datos MySQL para funcionar correctamente.
-
-1. Clona este repositorio:
-git clone <https://github.com/No-Country-simulation/g9-latam-team19-techmind.git>
-cd <frontend>
-cd <techmind-frontend>
-
-2. Instala las dependencias necesarias:
-npm install
-
-3. Inicia el servidor de desarrollo:
-npm run dev
-
-Una vez que el servidor inicie, abre tu navegador en la dirección indicada en la terminal.
-
-## 🔌 Conexión con el Backend
-
-El frontend se comunica con el servidor a través de los siguientes endpoints principales:
-
-* GET /api/contenido: Recupera el catálogo completo de contenidos, incluyendo las predicciones, palabras clave y recomendaciones generadas por la IA.
-* POST /api/contenido/procesar: Envía el texto y título de un nuevo recurso al motor de análisis para su evaluación y guardado automático.
-
+> Proyecto desarrollado durante la simulación **No Country Hackathon ONE** (G9-LATAM - Equipo 19) en colaboración con Alura y Oracle.
 
 ---
-Desarrollado por el Equipo 19
-Agosto 2026
+
+### 🌐 Prueba en Vivo (Demo)
+
+El ecosistema completo (Frontend, Backend API y Data Science API) se encuentra desplegado y ejecutándose en un entorno de producción en **Oracle Cloud Infrastructure (OCI)**. Puedes probar toda la experiencia integrada ingresando directamente a:
+
+👉 **[https://136.248.73.33/](https://136.248.73.33/)**
+
+> **Nota:** Al acceder al enlace web del Frontend, la aplicación interactúa automáticamente en segundo plano con la API de Spring Boot y el pipeline de Data Science sin necesidad de realizar configuraciones adicionales.
+
+## 🏗️ Arquitectura General del Sistema
+
+El ecosistema está construido bajo una arquitectura desacoplada de microservicios e interfaz web, totalmente containerizada y desplegada en **Oracle Cloud Infrastructure (OCI)** con soporte HTTPS y Reverse Proxy vía Apache.
+
+```plaintext
+                                [ Usuario ]
+                                     │
+                                 HTTPS :443
+                                     ▼
+                            Apache HTTP Server
+                         (/var/www/techmind)
+                                  │
+                 ┌────────────────┴────────────────┐
+                 ▼                                 ▼
+         [ Frontend Web ]                 [ Backend API ]
+         React 18 + Vite                Spring Boot 3 (Java 17)
+          (Archivos Estáticos)                 :8080
+                                                   │
+                                     ┌─────────────┴─────────────┐
+                                     ▼                           ▼
+                             [ Data Science API ]          [ Base de Datos ]
+                             FastAPI (Python 3)               MySQL 8.0
+                                   :8000                        :3306
+```
+
+## 🔄 Flujo de Datos
+
+1. **Frontend:** El usuario envía un título y un extracto técnico desde la interfaz web.
+2. **Backend:** Recibe la solicitud vía `/api/contenido/procesar` y orquesta la validación y comunicación.
+3. **Data Science:** Un servicio FastAPI procesa el texto, extrae keywords, genera embeddings (`all-MiniLM-L6-v2`) y clasifica la categoría con un modelo de Logistic Regression.
+4. **Recomendación y Persistencia:** El pipeline selecciona los mejores recursos del catálogo, el Backend persiste el resultado idempotente en MySQL y lo retorna formateado a la UI.
+
+## 📂 Módulos del Proyecto
+Cada área cuenta con su propio entorno y documentación detallada:
+
+| Módulo | Tecnología Principal | Descripción | Documentación |
+| :--- | :--- | :--- | :--- |
+| **Frontend** | React 18, TypeScript, Vite, CSS3 | Interfaz de usuario interactiva, dashboard de recursos y modales de análisis. | `📂 frontend/README.md` |
+| **Backend** | Spring Boot 3, Java 17, JPA, Flyway | Núcleo de persistencia, reglas de negocio, validaciones y orquestación REST. | `📂 backend/README.md` |
+| **Data Science** | Python 3, FastAPI, Scikit-learn, OCI | Extracción de palabras clave, clasificación por ML y motor de recomendaciones. | `📂 data-science/README.md` |
+
+## 🧪 Pruebas de API con Postman / cURL
+Puedes probar los endpoints de forma directa importando las peticiones en Postman o ejecutando los comandos `curl` en tu terminal.
+
+1. **Backend Principal (Spring Boot API):** Host Producción: [https://136.248.73.33](https://136.248.73.33/api/contenido)
+
+### Procesar y guardar nuevo contenido con IA
+* **Método:** `POST`
+* **Endpoint:** `/api/contenido/procesar`
+* **Headers:** `Content-Type: application/json`
+* **Body (JSON):**
+  ```json
+  {
+  "title": "Introducción a React y Componentes",
+  "text": "Aprende a crear componentes reutilizables con React, JSX y manejo de estado con Hooks como useState y useEffect."
+  }
+  ```
+### Listar todos los contenidos activos
+* **Método:** GET
+* **Endpoint:** `/api/contenido`
+
+### Consultar catálogo de recomendaciones con filtro
+* **Método:** `GET`
+* **Endpoint:** `/api/recomendaciones?category=Frontend`
+
+## 🌐 Entorno de Despliegue (OCI)
+El sistema se encuentra desplegado en una Máquina Virtual en Oracle Cloud Infrastructure (OCI) corriendo Oracle Linux 8.
+
+* **Servidor Web:** Apache 2.4 con `mod_ssl` y certificado SSL emitido por Let's Encrypt.
+* **Administración de Servicios:** `techmind-backend.service` (Spring Boot) y `techmind-python.service` (FastAPI) administrados mediante `systemd`.
+* **Ubicación de Producción:** /opt/techmind
+
+## ⚡ Instalación y Ejecución Local
+Prerrequisitos Globales
+* Java: 17+ & Maven 3.8+
+* Node.js: v16+ (recomendado v22)
+* Python: 3.9+
+* MySQL: 8.0+
+
+## Pasos para Iniciar los Servicios
+1. **Clonar el repositorio:**
+   ```bash
+   git clone [https://github.com/No-Country-simulation/g9-latam-team19-techmind.git](https://github.com/No-Country-simulation/g9-latam-team19-techmind.git)
+   cd g9-latam-team19-techmind
+   ```
+2. **Iniciar Data Science (Python/FastAPI):**
+   ```bash
+   cd data_science
+   python -m venv venv
+   source venv/bin/activate  # En Windows: venv\Scripts\activate
+   pip install -r requirements.txt
+   uvicorn api:app --reload --port 8000
+   ```
+3. **Iniciar Backend (Spring Boot):**
+   ```bash
+   cd ../backend
+   # Configurar credenciales de MySQL en src/main/resources/application.properties
+   ./mvnw spring-boot:run
+   ```
+4. **Iniciar Frontend (React/Vite):**
+   ```bash
+   cd ../frontend/techmind-frontend
+   npm install
+   npm run dev
+   ```
+
+### 👥 Equipo de Desarrollo
+Proyecto desarrollado por el equipo G9-LATAM - Equipo 19:
+
+| Integrante | Rol / Especialidad | Responsabilidades Clave |
+| :--- | :--- | :--- |
+| **Ana Berenice Noriega Camacho** | Tech Lead & Data Science Lead | Liderazgo técnico del proyecto, diseño de la arquitectura de IA, entrenamiento del modelo de ML y pipeline de NLP con FastAPI. |
+| **Juan Camarillo Gutiérrez** | Backend Lead Developer | Arquitectura y desarrollo completo de la API REST en Spring Boot, integración con FastAPI/Flyway, y supervisión técnica de la integración frontend. |
+| **Valeria Villicana Ponce de Leon** | Full-Stack Engineer (Frontend Focus) | Desarrollo de la interfaz interactiva en React, integración con la API REST y soporte en el diseño y modelado de la base de datos MySQL. |
+| **Jorge Luis Marquez Miguel** | DevOps & Cloud Engineer | Configuración y despliegue del ecosistema completo en OCI (Apache, SSL, Systemd) y apoyo en el desarrollo de la API Backend. |
+| **Joan Valle** | Data Scientist | Desarrollo del pipeline de NLP, entrenamiento del modelo clasificador y extracción de keywords. |
+| **Sara Rosaura Rapalino Vasquez** | Data Scientist | Curaduría del catálogo de recomendaciones, evaluación del modelo y pruebas de integración con FastAPI. |
+| **Harold David Perez Martinez** | Data Scientist | Procesamiento de texto, generación de vectorizaciones (*embeddings*) y optimización del modelo de ML. |
+   
